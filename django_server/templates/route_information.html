@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">  
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"> 
+  <head> 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+        rel="stylesheet" type="text/css">
+        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"
+        rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Маршрут</title> 
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+    <link rel="stylesheet" href="/static/css/route_information.css" type="text/css" />
+    <style type="text/css">
+     *{ font-size:12px; font-family:verdana;}
+     h1 { font-size:22px; }
+     .wrapper { width:900px; margin:0px auto; padding:15px;background-color:#eee; }
+     input { width:250px; border: 2px solid #CCC; line-height:20px;height:20px; border-radius:10px; padding:5px; }
+    </style>
+    </head> 
+     <body id="bodyID">
+      <p>Дата: <input type='text' class='datepicker' id='date' name='date'></p>
+
+      <div class="example-container">
+        <p>Время приезда</p>
+        <div>
+         <input type="text" id="time_in" name="basic_example_1" />
+        </div>
+      </div>
+
+      <div class="example-container">
+        <p>Время отъезда</p>
+        <div>
+          <input type="text" id="time_from" name="basic_example_2" />
+        </div>
+      </div>
+
+      <div class="checkbox">
+       <p><input type="checkbox" value="" id="checkbox_1">По адресу</p>
+      </div>
+
+      <div class="form-group">
+        <p>Адрес прибытия
+        <input type="email" class="form-control" id="edit_1" placeholder=""></p>
+      </div>
+      <div class="form-group">
+        <p>Адрес отбытия
+        <input type="email" class="form-control" id="edit_2" placeholder=""></p>
+      </div>
+
+     <p id="text_1">Место приезда<select class="form-control" id="form_1">
+       <option>Московский вокзал: Санкт-Петербург, Невский проспект, 85</option>
+       <option selected >Ладожский вокзал: Санкт-Петербург, Заневский проспект, 73</option>
+       <option>Витебский вокзал, Санкт-Петербург, Загородный проспект, 52</option>
+       <option>Финляндский вокзал: Санкт-Петербург, пл. Ленина, 6</option>
+       <option>Балтийский вокзал: Санкт-Петербург, наб. Обводного канала, 120</option>
+       <option>Аэропорт Пулково: Санкт-Петербург, Пулковское шоссе, 41 лит Б</option>
+       <option>Автовокзал: Санкт-Петербург, Набережная Обводного канала, 36</option>
+      </select></p>
+
+      <p id="text_2">Место отъезда<select class="form-control" id="form_2">
+       <option>Московский вокзал: Санкт-Петербург, Невский проспект, 85</option>
+       <option>Ладожский вокзал: Санкт-Петербург, Заневский проспект, 73</option>
+       <option>Витебский вокзал, Санкт-Петербург, Загородный проспект, 52</option>
+       <option>Финляндский вокзал: Санкт-Петербург, пл. Ленина, 6</option>
+       <option>Балтийский вокзал: Санкт-Петербург, наб. Обводного канала, 120</option>
+       <option>Аэропорт Пулково: Санкт-Петербург, Пулковское шоссе, 41 лит Б</option>
+       <option>Автовокзал: Санкт-Петербург, Набережная Обводного канала, 36</option>
+      </select></p>
+
+      <button type="button" class="btn btn-default" id="button_build">Построить маршрут</button>
+        <!--loading jQuery and other library-->
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+      <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="/static/js/jquery-ui-timepicker-addon.js"></script>
+      <script type="text/javascript" src="/static/js/jquery-ui-sliderAccess.js"></script>
+      <script type="text/javascript" src="/static/js/route_information.js"></script>
+
+    </body> 
+</html>
