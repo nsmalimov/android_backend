@@ -12,15 +12,9 @@ Python 2.7.
 
 Images:
 
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-221845.png =250x "Пример")
-
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-222004.png =250x "Пример")
-
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-222101.png =250x "Пример")
-
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223219.png =250x "Пример")
-
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223329.png =250x "Пример")
-
-![Alt text](https://github.com/nsmalimov/android_backend/blob/master/images/googleplay.png =250x "Пример")
-
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-221845.png" width="200" height="200" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-222004.png" width="200" height="200" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-222101.png" width="200" height="200" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223219.png" width="200" height="200" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223329.png" width="200" height="200" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/googleplay.png" width="200" height="200" />
