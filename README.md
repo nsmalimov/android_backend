@@ -17,4 +17,4 @@ Images:
 <img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-222101.png" width="300" height="400" />
 <img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223219.png" width="300" height="400" />
 <img src="https://github.com/nsmalimov/android_backend/blob/master/images/device-2015-05-19-223329.png" width="300" height="400" />
-<img src="https://github.com/nsmalimov/android_backend/blob/master/images/googleplay.png" width="300" height="400" />
+<img src="https://github.com/nsmalimov/android_backend/blob/master/images/googleplay.png" width="600" height="400" />
