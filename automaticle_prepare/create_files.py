@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
-from kudago_prepare import write_to_db_events
-from kudago_prepare import write_to_db_places
-
-from kassir_prepare import prepare_files_kassir
-from bileter_prepare import prepare_files_bileter
-import math
-from RF_model import Random_forest_func
-
-import pickle
-import os
-import sys
-import glob
-import time
-import urllib2
 import copy
 import datetime
+import glob
+import os
+import pickle
+import sys
+import time
+import urllib2
+
+from RF_model import Random_forest_func
+from kudago_prepare import write_to_db_events
+from kudago_prepare import write_to_db_places
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -22,9 +18,11 @@ sys.getdefaultencoding()
 
 path_to_file = "work_files"
 
+
 def union_func():
     main_array = []
     return main_array
+
 
 def write_categories_file(union_categories_rus, path):
     output = open(path + "/list_categories/" + "list_categories.pkl", 'wb')
@@ -32,24 +30,26 @@ def write_categories_file(union_categories_rus, path):
     pickle.dump(union_categories_rus, output)
     output.close()
 
+
 def write_events(union_main_array, time_array, path):
     for index, i in enumerate(time_array):
         new_path = "events_" + i + ".pkl"
-        output = open(path + "/events/" + new_path , 'wb')
+        output = open(path + "/events/" + new_path, 'wb')
 
         title_array = []
         events_to_write = []
         for j in union_main_array[index]:
             for k in j:
                 event_help_var = copy.deepcopy(k)
-                if not(event_help_var['title'] in title_array):
-                    events_to_write.append( event_help_var)
+                if not (event_help_var['title'] in title_array):
+                    events_to_write.append(event_help_var)
                     delta = datetime.timedelta(days=1)
                     title_array.append(event_help_var['title'])
 
         events_to_write = add_id_identify(events_to_write)
         pickle.dump(events_to_write, output)
         output.close()
+
 
 def get_avarege_kudago(array_events, array_places):
     help_array = []
@@ -68,16 +68,17 @@ def get_avarege_kudago(array_events, array_places):
 
     return average
 
+
 def union_parsers_func(array_kassir, array_bileter, cat_eng_kassir, cat_eng_bileter):
     equal_elem = []
-    #одинаковые категории
+    # одинаковые категории
     for index, i in enumerate(cat_eng_kassir):
         if (i in cat_eng_bileter):
             equal_elem.append(i)
 
     union_array = []
 
-    #объединение массивов (всё в одно)
+    # объединение массивов (всё в одно)
 
     how_much_days = len(array_kassir)
 
@@ -96,16 +97,15 @@ def union_parsers_func(array_kassir, array_bileter, cat_eng_kassir, cat_eng_bile
         cat_array = []
         non_equal_num = []
 
-
         array_to_del = []
         for i in xrange(len(data_one_day)):
             if len(data_one_day[i]) == 0:
-               array_to_del.append(copy.deepcopy(i))
+                array_to_del.append(copy.deepcopy(i))
 
         new_data_one_day = []
 
         for i in xrange(len(data_one_day)):
-            if not(i in array_to_del):
+            if not (i in array_to_del):
                 new_data_one_day.append(copy.deepcopy(data_one_day[i]))
 
         data_one_day = copy.deepcopy(new_data_one_day)
@@ -136,27 +136,30 @@ def union_parsers_func(array_kassir, array_bileter, cat_eng_kassir, cat_eng_bile
 
     return new_union, union_cat
 
+
 def check_internet():
     try:
-        response=urllib2.urlopen('http://www.google.ru',timeout=1)
+        response = urllib2.urlopen('http://www.google.ru', timeout=1)
         return True
-    except urllib2.URLError as err: pass
+    except urllib2.URLError as err:
+        pass
     return False
+
 
 def train_model(main_array, path, flag_rf):
     mix_coordinates_array = []
 
-    #соберем все координаты в новых массивах
+    # соберем все координаты в новых массивах
     for i in main_array:
         for j in i:
             for k in j:
                 mix_coordinates_array.append(tuple((k['latitude'], k['longitude'])))
 
-    #проверим есть ли уже файл с старыми координатами
+    # проверим есть ли уже файл с старыми координатами
     train_dist_path = path + "coordinates/" + "coordinates.pkl"
     is_file = os.path.exists(train_dist_path)
 
-    #если есть то загрузим их
+    # если есть то загрузим их
     if (is_file):
         inputer = open(train_dist_path, 'r')
 
@@ -164,33 +167,33 @@ def train_model(main_array, path, flag_rf):
         inputer.close()
 
         if (len(train_dist_dict) > 60000):
-           if (flag_rf):
-               return_array = Random_forest_func(path)
-           else:
-               return []
-           return return_array
-    #иначе создадим новый словарь
+            if (flag_rf):
+                return_array = Random_forest_func(path)
+            else:
+                return []
+            return return_array
+    # иначе создадим новый словарь
     else:
         train_dist_dict = {}
 
-    #перемшаем всё заново (добавим и новые и старые)
+    # перемшаем всё заново (добавим и новые и старые)
     if (len(train_dist_dict) != 0):
         for i in train_dist_dict:
             mix_coordinates_array.append(tuple((i[0], i[1])))
             mix_coordinates_array.append(tuple((i[2], i[3])))
 
-    #уберем повторы
+    # уберем повторы
     mix_coordinates_array = list(set(mix_coordinates_array))
 
-    #новый перемешанный словарь
+    # новый перемешанный словарь
     all_mix_array = {}
     for i in mix_coordinates_array:
         for j in mix_coordinates_array:
-            all_mix_array[i + j] =  "no"
+            all_mix_array[i + j] = "no"
 
     flag_to_return = False
 
-    #если уже раньше считали расстояние, то запишем его
+    # если уже раньше считали расстояние, то запишем его
     for i in all_mix_array:
         try:
             all_mix_array[i] = train_dist_dict[i]
@@ -198,12 +201,12 @@ def train_model(main_array, path, flag_rf):
         except Exception as inst:
             None
 
-    if ((len(all_mix_array) > 60000 or not(flag_to_return)) and (is_file)): 
-       if (flag_rf):
-           return_array = Random_forest_func(path)
-       else:
-           return []
-       return return_array
+    if ((len(all_mix_array) > 60000 or not (flag_to_return)) and (is_file)):
+        if (flag_rf):
+            return_array = Random_forest_func(path)
+        else:
+            return []
+        return return_array
 
     if (flag_rf):
         return_array = Random_forest_func(path)
@@ -212,12 +215,14 @@ def train_model(main_array, path, flag_rf):
 
     return return_array
 
+
 def get_minutes(scikit_model, latitude_1, longitude_1, latitude_2, longitude_2):
     minutes_predict = scikit_model.predict([latitude_1, longitude_1, latitude_2, longitude_2])
     return int(minutes_predict[0])
 
+
 def dist_array(events, path):
-    input = open(path + "/scikit_model/" + "scikit_model.pkl" , 'r')
+    input = open(path + "/scikit_model/" + "scikit_model.pkl", 'r')
     regr = pickle.load(input)
     input.close()
 
@@ -235,16 +240,18 @@ def dist_array(events, path):
                 distance_matrix[i][j] = 0
                 continue
 
-            minutes = get_minutes(regr,\
-                      events[i]['latitude'], events[i]['longitude'], events[j]['latitude'], events[j]['longitude'])
+            minutes = get_minutes(regr, \
+                                  events[i]['latitude'], events[i]['longitude'], events[j]['latitude'],
+                                  events[j]['longitude'])
 
             distance_matrix[i][j] = copy.deepcopy(minutes)
 
     return distance_matrix
 
+
 def create_dist_matrix(path):
     for file in glob.glob(path + "/events/" + "*.pkl"):
-        input = open(file ,"r")
+        input = open(file, "r")
         day_data = pickle.load(input)
         input.close()
 
@@ -256,22 +263,25 @@ def create_dist_matrix(path):
         pickle.dump(day_dist_data, output)
         output.close()
 
+
 def add_id_identify(main_array):
-    #по дням\
+    # по дням\
     counter = 1
     for i in xrange(len(main_array)):
-        #по событиям
+        # по событиям
         main_array[i]['id'] = counter
         counter += 1
 
     return main_array
 
+
 def safety_write_coordinates(path, some_data):
-    output = open(path + "/coordinates/" + "coordinates.pkl" , 'w')
+    output = open(path + "/coordinates/" + "coordinates.pkl", 'w')
 
     pickle.dump(some_data, output)
 
     output.close()
+
 
 def write_log_file(text, path, is_first):
     if (is_first):
@@ -285,6 +295,7 @@ def write_log_file(text, path, is_first):
         f = open(path + "log.txt", "a")
         f.write(text + "\n")
         f.close()
+
 
 def get_time_array(how_many_days, flag):
     import datetime
@@ -323,9 +334,8 @@ def get_time_array(how_many_days, flag):
 
 
 def create_work_files():
-
-    #парсинг на эту неделю и на следующую
-    #time_array_need = ['2015-06-26', '2015-06-27', '2015-06-28',\
+    # парсинг на эту неделю и на следующую
+    # time_array_need = ['2015-06-26', '2015-06-27', '2015-06-28',\
     #                   '2015-06-29', '2015-06-30', '2015-07-01',\
     #                   '2015-07-02']
 
@@ -341,23 +351,23 @@ def create_work_files():
     write_log_file("nothing", path, True)
 
     try:
-        if not(check_internet()):
-           write_log_file("not connect to internet", path, False)
-           print "not connect to internet"
-           return 0
+        if not (check_internet()):
+            write_log_file("not connect to internet", path, False)
+            print "not connect to internet"
+            return 0
     except Exception as inst:
-           write_log_file(str(inst), path, False)
-           print inst
+        write_log_file(str(inst), path, False)
+        print inst
 
     debug_param = True
 
     array_events, time_array, cat_eng_events, cat_rus_events = \
-            write_to_db_events.main_func(debug_param, copy.deepcopy(time_array_need))
+        write_to_db_events.main_func(debug_param, copy.deepcopy(time_array_need))
     write_log_file("kudago events end", path, False)
     print "kudago events end"
 
     array_places, time_array, cat_eng_places, cat_rus_places = \
-            write_to_db_places.main_func(debug_param, copy.deepcopy(time_array_need))
+        write_to_db_places.main_func(debug_param, copy.deepcopy(time_array_need))
     write_log_file("kudago places end", path, False)
     print "kudago places end"
 
@@ -412,6 +422,7 @@ def create_work_files():
     # create_dist_matrix(path)
     # write_log_file("distance matrix end", path, False)
     # print "distance matrix end"
+
 
 start_time = time.time()
 

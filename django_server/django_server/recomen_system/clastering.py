@@ -24,15 +24,14 @@ def make_clast(users_data, ratings_data):
 
     num_clusters = len(X_array) / 50
 
-    #на сколько кластеров разбивать
+    # на сколько кластеров разбивать
     if (num_clusters <= 50): num_clusters = 5
     if (num_clusters > 50 and num_clusters < 150): num_clusters = 10
 
-    k_means = cluster.KMeans(n_clusters = num_clusters)
+    k_means = cluster.KMeans(n_clusters=num_clusters)
     k_means.fit(X_array)
 
-
-    #номер показывает номер кластера
+    # номер показывает номер кластера
     clusterized_array = list(k_means.labels_)
 
     dict_users_clasters = {}
@@ -41,6 +40,7 @@ def make_clast(users_data, ratings_data):
         dict_users_clasters[users_numerate_array[index]] = copy.deepcopy(i)
 
     return dict_users_clasters
+
 
 def make_clast_single(users_data):
     users_inf_dict = {}
@@ -54,15 +54,14 @@ def make_clast_single(users_data):
 
     num_clusters = len(X_array) / 50
 
-    #на сколько кластеров разбивать
+    # на сколько кластеров разбивать
     if (num_clusters <= 50): num_clusters = 5
     if (num_clusters > 50 and num_clusters < 150): num_clusters = 10
 
-    k_means = cluster.KMeans(n_clusters = num_clusters)
+    k_means = cluster.KMeans(n_clusters=num_clusters)
     k_means.fit(X_array)
 
-
-    #номер показывает номер кластера
+    # номер показывает номер кластера
     clusterized_array = list(k_means.labels_)
 
     dict_users_clasters = {}

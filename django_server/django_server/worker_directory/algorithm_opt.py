@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import diplom_django.algorithm.my_new_algorithm as alg
 import datetime
+
+import diplom_django.algorithm.my_new_algorithm as alg
+
 
 def time_conversion(time):
     hours = time.seconds / 60 / 60
@@ -20,7 +22,8 @@ def time_conversion(time):
     time_str = hours + ":" + minutes
     return time_str
 
-#основной алгоритм
+
+# основной алгоритм
 def get_route_main(request_dict, recom_events):
     date = request_dict['date']
     time_to = request_dict['time_to']
@@ -38,22 +41,22 @@ def get_route_main(request_dict, recom_events):
     longitude_out = float(out_place_split[1])
 
     try:
-        events, route =\
-            alg.get_route(recom_events, date, time_to, time_from, latitude_in, longitude_in, latitude_out, longitude_out)
+        events, route = \
+            alg.get_route(recom_events, date, time_to, time_from, latitude_in, longitude_in, latitude_out,
+                          longitude_out)
         array_out = {}
 
-        #возврат адреса
-        #время в дороге (int)
+        # возврат адреса
+        # время в дороге (int)
 
-        #i.event['timestart'], i.event['timeend'], \
-          # i.event['duration'], i.event['fixedtime'], i.event['id'], time_next
+        # i.event['timestart'], i.event['timeend'], \
+        # i.event['duration'], i.event['fixedtime'], i.event['id'], time_next
         first_dict = {"time_start": time_conversion(route[0][0]), "time_road_next": route[0][-1], \
                       "latitude": events[route[0][4]]['latitude'], "longitude": events[route[0][4]]['longitude']}
         array_out['first_place'] = first_dict
 
-
         help_array = []
-        for i in xrange(1, len(route)-1):
+        for i in xrange(1, len(route) - 1):
             new_dict = {"time_start": time_conversion(route[i][0]),
                         "time_end": time_conversion(route[i][1]),
 
@@ -75,12 +78,12 @@ def get_route_main(request_dict, recom_events):
 
         array_out['medium_place'] = help_array
 
-        last_dict = {"time_end": time_conversion(route[-1][1]),\
-                      "latitude": events[route[-1][4]]['latitude'], "longitude": events[route[-1][4]]['longitude']}
+        last_dict = {"time_end": time_conversion(route[-1][1]), \
+                     "latitude": events[route[-1][4]]['latitude'], "longitude": events[route[-1][4]]['longitude']}
 
-        #last_dict = {"time_end": time_from, "latitude": latitude_out, "longitude": longitude_out}
+        # last_dict = {"time_end": time_from, "latitude": latitude_out, "longitude": longitude_out}
 
-        #print last_dict
+        # print last_dict
 
         array_out['last_place'] = last_dict
 
@@ -88,14 +91,3 @@ def get_route_main(request_dict, recom_events):
     except Exception as inst:
         None
         return inst
-
-
-
-
-
-
-
-
-
-
-

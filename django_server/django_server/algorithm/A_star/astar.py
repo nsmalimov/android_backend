@@ -2,27 +2,29 @@
 
 import copy
 import datetime
+
 import diplom_django.get_simple_dist
+
 
 def check_name(some_path):
     all_event_id = []
     for i in some_path:
         all_event_id.append(i[-1])
 
-    #print all_event_id
+    # print all_event_id
     return all_event_id
 
-def check_time_func(time_in, time_out, path, dist_matrix, events):
 
+def check_time_func(time_in, time_out, path, dist_matrix, events):
     path = path[::-1]
 
     main_array = []
 
     for i in path:
-        main_array.append([i.event['timestart'], i.event['timeend'],\
+        main_array.append([i.event['timestart'], i.event['timeend'], \
                            i.event['duration'], i.event['fixedtime'], i.event['id']])
 
-    #for i in main_array:
+    # for i in main_array:
     #    print i[0]
     first_event = main_array[0]
     last_event = main_array[-1]
@@ -30,7 +32,7 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
     del main_array[0]
     del main_array[-1]
 
-    #for i in main_array:
+    # for i in main_array:
     #    print i[0]
 
     main_array.sort(key=lambda x: x[0])
@@ -42,38 +44,38 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
     new_path = []
     new_path.append(first_event)
 
-    #for i in main_array:
+    # for i in main_array:
     #    print i[0], i[1], i[2]
 
 
     counter = 0
-    #плюс проверка на ночное время
+    # плюс проверка на ночное время
     for i in main_array:
-        #if fixedtime (театры, концерты)
+        # if fixedtime (театры, концерты)
         if (i[3]):
-            #если событие вообще не в интервале приезда
+            # если событие вообще не в интервале приезда
             if (i[0] < time_in or i[0] > time_out):
                 continue
 
-            #если не успеваем доехать до начала события
+            # если не успеваем доехать до начала события
             if ((last_time + datetime.timedelta(minutes=dist_matrix[last_id][i[-1]])) > i[0]):
                 continue
 
-            time_road_to = datetime.timedelta(minutes = dist_matrix[last_id][i[-1]])
+            time_road_to = datetime.timedelta(minutes=dist_matrix[last_id][i[-1]])
 
-            time_road_back = datetime.timedelta(minutes = dist_matrix[i[-1]][len(dist_matrix)-1])
+            time_road_back = datetime.timedelta(minutes=dist_matrix[i[-1]][len(dist_matrix) - 1])
 
             all_time += time_road_to + i[2] + + time_road_back
 
-            #если время посещения события и возврат в конечную больше всего интервала времени
+            # если время посещения события и возврат в конечную больше всего интервала времени
             if (all_time > time_out):
                 break
 
             copy_i = copy.deepcopy(i)
-            #i.append(time_road_to)
+            # i.append(time_road_to)
 
             if (time_road_to > datetime.timedelta(minutes=45)):
-                #print time_road_to
+                # print time_road_to
                 continue
 
             if (i[-1] in check_name(new_path)):
@@ -82,12 +84,12 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
 
             last_id = i[-1]
 
-            #окончательное время окончания последнего события добавленного в массив
+            # окончательное время окончания последнего события добавленного в массив
             last_time = i[0] + i[2]
 
-        #if not fixedtime (парки, музеи)
+        # if not fixedtime (парки, музеи)
 
-        if (not(i[3])):
+        if (not (i[3])):
             check_var = False
             starter_time = last_time
 
@@ -107,8 +109,8 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
                     times_array.append(new_time)
 
             for j in times_array:
-                time_road_to = datetime.timedelta(minutes = dist_matrix[last_id][i[-1]])
-                time_road_back = datetime.timedelta(minutes = dist_matrix[i[-1]][len(dist_matrix)-1])
+                time_road_to = datetime.timedelta(minutes=dist_matrix[last_id][i[-1]])
+                time_road_back = datetime.timedelta(minutes=dist_matrix[i[-1]][len(dist_matrix) - 1])
 
                 some_time = j + time_road_to + i[2] + time_road_back
 
@@ -118,9 +120,9 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
                     break
 
             if (check_var):
-                time_road_to = datetime.timedelta(minutes = dist_matrix[last_id][i[-1]])
+                time_road_to = datetime.timedelta(minutes=dist_matrix[last_id][i[-1]])
 
-                time_road_back = datetime.timedelta(minutes = dist_matrix[i[-1]][len(dist_matrix)-1])
+                time_road_back = datetime.timedelta(minutes=dist_matrix[i[-1]][len(dist_matrix) - 1])
 
                 all_time += (starter_time - all_time) + time_road_to + time_road_back + i[2]
 
@@ -131,7 +133,7 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
                 to_insert[0] = starter_time
                 to_insert[1] = starter_time + i[2]
 
-                #to_insert.append(time_road_to)
+                # to_insert.append(time_road_to)
                 latitude1 = events[last_id]['latitude']
                 longitude1 = events[last_id]['longitude']
 
@@ -157,25 +159,26 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
 
     for index, i in enumerate(new_path):
         if ((i[-1] + 1) < len(dist_matrix)):
-            #print dist_matrix[i[-1]] [i[-1] + 1]
-            new_path[index].append(dist_matrix[i[-1]] [i[-1] + 1] )
+            # print dist_matrix[i[-1]] [i[-1] + 1]
+            new_path[index].append(dist_matrix[i[-1]][i[-1] + 1])
 
-    #for i in new_path:
+    # for i in new_path:
     #    print i[-1]
     new_path[-1].append(0)
 
-    #for i in new_path:
+    # for i in new_path:
     #    print i[-1]
 
     return new_path
 
+
 class AStar(object):
     def __init__(self, graph):
         self.graph = graph
-        
+
     def heuristic(self, node, start, end, dist_matrix):
         raise NotImplementedError
-        
+
     def search(self, time_in, time_out, start, end, dist_matrix, copy_dist_matrix, events):
         inserted_title = []
         openset = set()
@@ -186,21 +189,21 @@ class AStar(object):
         last_y = 0
         counter = 0
         while openset:
-            current = min(openset, key=lambda o:o.g + o.h)
+            current = min(openset, key=lambda o: o.g + o.h)
 
-            #обратный ход (если долшли до конца)
+            # обратный ход (если долшли до конца)
             if current == end:
                 path = []
                 while current.parent:
-                    #print dir(current)
+                    # print dir(current)
                     path.append(current)
                     current = current.parent
 
-                #добавление первого
+                # добавление первого
                 path.append(current)
 
                 path = check_time_func(time_in, time_out, path, copy_dist_matrix, events)
-                #перевернуть массив с маршрутом
+                # перевернуть массив с маршрутом
                 return path
 
             openset.remove(current)
@@ -219,8 +222,8 @@ class AStar(object):
                     if node.g > new_g:
                         node.g = new_g
                         node.parent = current
-                        #last_x = node.x
-                        #last_y = node.y
+                        # last_x = node.x
+                        # last_y = node.y
                 else:
                     g_func = current.move_cost(node, copy.deepcopy(dist_matrix))
                     node.g = current.g + g_func
@@ -229,8 +232,8 @@ class AStar(object):
                     last_x = node.x
                     last_y = node.y
                     openset.add(node)
-            #counter += 1
-            #print counter
+                    # counter += 1
+                    # print counter
         return None
 
 
@@ -239,6 +242,6 @@ class AStarNode(object):
         self.g = 0
         self.h = 0
         self.parent = None
-        
+
     def move_cost(self, other, dist_matrix):
         raise NotImplementedError

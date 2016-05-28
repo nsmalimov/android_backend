@@ -8,10 +8,11 @@ from django.db import connection
 def select_ratings(cur, vk_id):
     recom_id_event = []
     cur.execute("SELECT event_id FROM ratings_table WHERE vk_id=" + str(vk_id) + \
-            "AND ((assessment=4)" + "OR (assessment=5))")
+                "AND ((assessment=4)" + "OR (assessment=5))")
     for i in cur:
         recom_id_event.append(copy.deepcopy(i[0]))
     return recom_id_event
+
 
 def select_event_title(cur, recom_id_event):
     event_title_recom = []
@@ -20,6 +21,7 @@ def select_event_title(cur, recom_id_event):
         for i in cur:
             event_title_recom.append(copy.deepcopy(i[0]))
     return list(set(event_title_recom))
+
 
 def main_func(vk_id):
     recom_title_event = []
@@ -38,9 +40,9 @@ def main_func(vk_id):
 
     recom_title_event = select_event_title(cur, recom_id_event)
 
-    #connection.close()
-    #psql_preferences.disconnect_from_db(cur, conn)
+    # connection.close()
+    # psql_preferences.disconnect_from_db(cur, conn)
 
     return recom_title_event
 
-#main_func(21747799)
+# main_func(21747799)

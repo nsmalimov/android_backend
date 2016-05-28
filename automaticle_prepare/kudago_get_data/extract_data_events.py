@@ -1,10 +1,11 @@
+import base64
 import json
-import pickle
 import os
+import pickle
+import urllib2
 
-import urllib2, base64
 
-#Pending
+# Pending
 
 def extract_data():
     username = 'amobile:uoPh1Ni4'
@@ -20,4 +21,4 @@ def extract_data():
     path += 'events.pkl'
     pickle.dump(data, open(path, 'w'))
 
-#extract_data()
+    # extract_data()

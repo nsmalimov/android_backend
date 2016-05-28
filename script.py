@@ -1,15 +1,16 @@
-import pickle
 import copy
 import glob
-import sys
+import pickle
+
 
 def get_minutes(scikit_model, latitude_1, longitude_1, latitude_2, longitude_2):
     minutes_predict = scikit_model.predict([latitude_1, longitude_1, latitude_2, longitude_2])
     return int(minutes_predict[0])
 
+
 def create_dist_matrix(forest, path):
     for file in glob.glob(path + "/events/" + "*.pkl"):
-        input = open(file ,"r")
+        input = open(file, "r")
         day_data = pickle.load(input)
         input.close()
 
@@ -20,6 +21,7 @@ def create_dist_matrix(forest, path):
         output = open(path + "/distance_matrix/" + name_new_file, 'w')
         pickle.dump(day_dist_data, output)
         output.close()
+
 
 def dist_array(forest, events, path):
     distance_matrix = []
@@ -36,11 +38,13 @@ def dist_array(forest, events, path):
                 distance_matrix[i][j] = 0
                 continue
 
-            minutes = get_minutes(forest, events[i]['latitude'], events[i]['longitude'], events[j]['latitude'], events[j]['longitude'])
+            minutes = get_minutes(forest, events[i]['latitude'], events[i]['longitude'], events[j]['latitude'],
+                                  events[j]['longitude'])
 
             distance_matrix[i][j] = copy.deepcopy(minutes)
 
     return distance_matrix
+
 
 path = "/home/azureuser/data_files/"
 
@@ -54,8 +58,8 @@ X_train = []
 Y_train = []
 for i in coord:
     if (coord[i] != "no"):
-    	X_train.append(copy.deepcopy(list(i)))
-       	Y_train.append(copy.deepcopy(int(coord[i])))
+        X_train.append(copy.deepcopy(list(i)))
+        Y_train.append(copy.deepcopy(int(coord[i])))
 
 forest1 = RandomForestRegressor()
 
@@ -63,12 +67,12 @@ forest1.fit(X_train, Y_train)
 
 create_dist_matrix(forest1, path)
 
-#f = open(path + "distance_matrix/dist_2015-06-09.pkl", "r")
+# f = open(path + "distance_matrix/dist_2015-06-09.pkl", "r")
 
-#dist_matrix = pickle.load(f)
+# dist_matrix = pickle.load(f)
 
-#f.close()
-#for i in dist_matrix:
+# f.close()
+# for i in dist_matrix:
 #	print i
 
 
@@ -77,6 +81,3 @@ f = open(path + "scikit_model/scikit_model.pkl", "w")
 pickle.dump(forest1, f)
 
 f.close()
-
-
-

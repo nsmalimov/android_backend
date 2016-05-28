@@ -10,14 +10,14 @@ def rating_dict_create(ratings_data):
 
     for i in ratings_data:
         try:
-            dict_rate[i[1]].update({i[0]:i[2]})
+            dict_rate[i[1]].update({i[0]: i[2]})
         except:
-            dict_rate[i[1]] = {i[0]:i[2]}
+            dict_rate[i[1]] = {i[0]: i[2]}
 
     return dict_rate
 
-def use_clastering(users_data, ratings_data):
 
+def use_clastering(users_data, ratings_data):
     # event_id, vk_id, assessment
 
     rating_dict = rating_dict_create(ratings_data)
@@ -25,8 +25,8 @@ def use_clastering(users_data, ratings_data):
     predict_array = []
     actual_array = []
 
-    #кластеризовать пользователей
-    #{user:claster}
+    # кластеризовать пользователей
+    # {user:claster}
     dict_users_clasters = clastering.make_clast(users_data, ratings_data)
 
     predict_array = []
@@ -55,13 +55,13 @@ def use_clastering(users_data, ratings_data):
 
     return predict_array, actual_array
 
-def use_clastering_single(event_id, vk_id, users_data, ratings_data):
 
+def use_clastering_single(event_id, vk_id, users_data, ratings_data):
     # event_id, vk_id, assessment
     rating_dict = rating_dict_create(ratings_data)
 
-    #кластеризовать пользователей
-    #{user:claster}
+    # кластеризовать пользователей
+    # {user:claster}
     dict_users_clasters = clastering.make_clast_single(users_data)
 
     cluster = copy.deepcopy(dict_users_clasters[vk_id])
@@ -76,27 +76,14 @@ def use_clastering_single(event_id, vk_id, users_data, ratings_data):
                 array_assess.append(copy.deepcopy(inner_dict_new[event_id_new]))
 
     if (len(array_assess) != 0):
-       predict_asses = sum(array_assess) / float(len(array_assess))
+        predict_asses = sum(array_assess) / float(len(array_assess))
     else:
-       predict_asses = 0
+        predict_asses = 0
 
     return predict_asses
+
 
 def main(users_data, events_data, ratings_data):
     predict_array, actual_array = use_clastering(users_data, ratings_data)
 
     return predict_array, actual_array
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -34,7 +34,7 @@ function showAdminPopup(triggeringLink, name_regexp) {
     if (href.indexOf('?') == -1) {
         href += '?_popup=1';
     } else {
-        href  += '&_popup=1';
+        href += '&_popup=1';
     }
     var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
     win.focus();
@@ -103,7 +103,7 @@ function dismissChangeRelatedObjectPopup(win, objId, newRepr, newId) {
     var id = windowname_to_id(win.name).replace(/^edit_/, '');
     var selectsSelector = interpolate('#%s, #%s_from, #%s_to', [id, id, id]);
     var selects = django.jQuery(selectsSelector);
-    selects.find('option').each(function() {
+    selects.find('option').each(function () {
         if (this.value == objId) {
             this.innerHTML = newRepr;
             this.value = newId;
@@ -117,7 +117,7 @@ function dismissDeleteRelatedObjectPopup(win, objId) {
     var id = windowname_to_id(win.name).replace(/^delete_/, '');
     var selectsSelector = interpolate('#%s, #%s_from, #%s_to', [id, id, id]);
     var selects = django.jQuery(selectsSelector);
-    selects.find('option').each(function() {
+    selects.find('option').each(function () {
         if (this.value == objId) {
             django.jQuery(this).remove();
         }

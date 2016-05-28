@@ -1,13 +1,14 @@
 # -*_ coding: utf-8 -*-
 
-import urllib2
-import time
-from bs4 import BeautifulSoup
 import datetime
 import json
-import pickle
 import os
+import pickle
 import sys
+import time
+import urllib2
+
+from bs4 import BeautifulSoup
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -15,25 +16,27 @@ sys.setdefaultencoding('utf-8')
 domain = 'https://spb.kassir.ru/'
 
 event_categories = [
-    ('concert', 'categories=c13', 'Концерты'), #1
-    ('theater', 'categories=c3', 'Театры'), #2
-    ('show', 'categories=c1', 'Шоу'), #3
-    ('clubs', 'categories=c25', 'Клубы'), #4
-    ('kids', 'categories=c8', 'Детские мероприятия'), #5
-    ('excursions', 'categories=c23', 'Экскурсии'), #61
-    ('exhibition', 'categories=c22', 'Выставки'), #7
-    ('sport', 'categories=c11', 'Спорт'), #8
+    ('concert', 'categories=c13', 'Концерты'),  # 1
+    ('theater', 'categories=c3', 'Театры'),  # 2
+    ('show', 'categories=c1', 'Шоу'),  # 3
+    ('clubs', 'categories=c25', 'Клубы'),  # 4
+    ('kids', 'categories=c8', 'Детские мероприятия'),  # 5
+    ('excursions', 'categories=c23', 'Экскурсии'),  # 61
+    ('exhibition', 'categories=c22', 'Выставки'),  # 7
+    ('sport', 'categories=c11', 'Спорт'),  # 8
 ]
 
-#event_categories_list = ['concert']
+# event_categories_list = ['concert']
 
 event_categories_list = ['theater', 'concert', 'show', 'clubs', 'kids', 'excursions', 'exhibition', 'sport']
 
 page_conv = lambda n: "/list%d" % n
 
+
 def get_today_data():
     today_date = datetime.date.today()
     return today_date
+
 
 def get_coordinates(address):
     url_yandex = "http://geocode-maps.yandex.ru/1.x/?format=json&geocode=" + address
@@ -52,18 +55,20 @@ def get_coordinates(address):
 
     return latitude, longitude
 
+
 def get_need_time(num_days):
     today_date = get_today_data()
-    delta = datetime.timedelta(days = 1)
+    delta = datetime.timedelta(days=1)
     last_date = today_date
     date_array_out = []
     date_array_out.append(str(today_date))
-    for i in xrange(num_days-1):
+    for i in xrange(num_days - 1):
         date = last_date + delta
         date_array_out.append(str(date))
         last_date = date
 
     return date_array_out
+
 
 def make_request(url, delay=2):
     time.sleep(delay)
@@ -72,8 +77,10 @@ def make_request(url, delay=2):
     request.add_header('Accept-Encoding', 'utf-8')
     return urllib2.urlopen(request)
 
+
 def check_slipped(event_date, need_date):
-    month_array = [u'января' , u'февраля', u'марта', u'апреля', u'мая', u'июня', u'июля', u'августа', u'сентября', u'октября', u'ноября', u'декабря']
+    month_array = [u'января', u'февраля', u'марта', u'апреля', u'мая', u'июня', u'июля', u'августа', u'сентября',
+                   u'октября', u'ноября', u'декабря']
 
     date_split = need_date.split(u"-")
 
@@ -99,8 +106,10 @@ def check_slipped(event_date, need_date):
     else:
         return False
 
+
 def date_check(event_date, date):
-    month_array = [u'января' , u'февраля', u'марта', u'апреля', u'мая', u'июня', u'июля', u'августа', u'сентября', u'октября', u'ноября', u'декабря']
+    month_array = [u'января', u'февраля', u'марта', u'апреля', u'мая', u'июня', u'июля', u'августа', u'сентября',
+                   u'октября', u'ноября', u'декабря']
 
     date_split = date.split("-")
 
@@ -122,6 +131,7 @@ def date_check(event_date, date):
     else:
         return False
 
+
 def parse_events(one_date):
     stop_marker = False
     first_marker = False
@@ -139,20 +149,20 @@ def parse_events(one_date):
         i_page = 0
         url = domain + 'kassir/search/?date=' + date_prepare + '&' + cat_type + "&page=" + str(i_page + 1)
 
-        #print url
+        # print url
         try:
             soup = BeautifulSoup(make_request(url))
         except:
-            #print "error: open new url"
+            # print "error: open new url"
             continue
 
         try:
-            #проверить
+            # проверить
             n_pages = soup.find(class_='last').a['href']
             n_pages_split = n_pages.split("&page=")
             n_pages = int(n_pages_split[-1])
         except Exception as inst:
-            #print "cannot find nums of pages", inst
+            # print "cannot find nums of pages", inst
             n_pages = 1
 
         return_checker = 0
@@ -169,17 +179,17 @@ def parse_events(one_date):
 
             for event in afisha_events_item:
 
-                #добавить выход из цикла если дата не подходит
+                # добавить выход из цикла если дата не подходит
                 parsed_event = {}
-                parsed_event['categories'] =  cat_eng
-                parsed_event['categoriesrus']  = cat_rus
+                parsed_event['categories'] = cat_eng
+                parsed_event['categoriesrus'] = cat_rus
 
                 try:
                     title = event.find(class_='b-event-item__tile__name').find(class_='double').text
                 except:
                     print url + " error title"
                     continue
-                parsed_event['title'] =  str(title)
+                parsed_event['title'] = str(title)
 
                 try:
                     ticket = domain + event.find(class_="link-buy")['href']
@@ -207,13 +217,13 @@ def parse_events(one_date):
                     break
 
                 if (stop_marker):
-                   first_marker = True
+                    first_marker = True
 
-                if (not(first_marker)):
-                   continue
+                if (not (first_marker)):
+                    continue
 
-                if (not(stop_marker) and first_marker):
-                   break
+                if (not (stop_marker) and first_marker):
+                    break
 
                 try:
                     time_event = event_soup.find(class_='event-header__date').find(class_='time').string
@@ -224,7 +234,7 @@ def parse_events(one_date):
 
                 try:
                     description = "".join([node if node else ""
-                                        for node in event_soup.find(id='event-description').text])
+                                           for node in event_soup.find(id='event-description').text])
 
                     description = ' '.join(str(description).split())
                 except Exception as inst:
@@ -232,7 +242,7 @@ def parse_events(one_date):
                 parsed_event['description'] = description
 
                 try:
-                    image = event_soup.find(class_= 'event-header__image').findAll('img')[0].attrs['src']
+                    image = event_soup.find(class_='event-header__image').findAll('img')[0].attrs['src']
                 except:
                     image = "no"
 
@@ -244,7 +254,7 @@ def parse_events(one_date):
                     print url + " place url"
                     continue
 
-                #переход на страницу места проведения события
+                # переход на страницу места проведения события
                 try:
                     place_soup = BeautifulSoup(make_request(place_url))
 
@@ -256,7 +266,7 @@ def parse_events(one_date):
 
                 parsed_data.append(copy.deepcopy(parsed_event))
 
-            if (not(stop_marker) and first_marker):
+            if (not (stop_marker) and first_marker):
                 break
 
             if (slipped_marker):
@@ -275,7 +285,9 @@ def parse_events(one_date):
 
     return parsed_data
 
+
 import copy
+
 
 def parsing(time_array_need):
     counter = 0
@@ -285,8 +297,8 @@ def parsing(time_array_need):
 
     for index, i in enumerate(array_need_time):
 
-        #массив с элементами на один день
-        #каждый элемент - это скловарь
+        # массив с элементами на один день
+        # каждый элемент - это скловарь
         day_array = []
         day_array = parse_events(i)
 
@@ -306,7 +318,7 @@ def parsing(time_array_need):
                         if (split_address[0] != u"Санкт-Петербург,"):
                             day_array[k]['address'] = "Санкт-Петербург, " + day_array[k]['address']
                 except Exception as inst:
-                    #print inst
+                    # print inst
                     continue
 
             day_array[k]['latitude'] = latitude
@@ -316,27 +328,24 @@ def parsing(time_array_need):
 
     path = os.path.dirname(os.path.abspath(__file__)) + "/data/"
 
-    output = open(path + "kassir.pkl" , 'w')
+    output = open(path + "kassir.pkl", 'w')
 
     pickle.dump(kassir_data, output)
 
     output.close()
 
+# parsing(["2015-06-03"])
+# import datetime
 
-#parsing(["2015-06-03"])
-#import datetime
+# date = datetime.date.today()
 
-#date = datetime.date.today()
+# date = [str(date)]
 
-#date = [str(date)]
-
-#time_array_need = ['2015-05-17', '2015-05-18', '2015-05-19',\
+# time_array_need = ['2015-05-17', '2015-05-18', '2015-05-19',\
 #                   '2015-05-20', '2015-05-21', '2015-05-22',\
 #                   '2015-05-23',
 #                   '2015-05-24', '2015-05-25', '2015-05-26',\
 #                   '2015-05-27', '2015-05-28', '2015-05-29',\
 #                   '2015-05-30']
 #
-#parsing(time_array_need)
-
-
+# parsing(time_array_need)

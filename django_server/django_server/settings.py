@@ -17,7 +17,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -31,7 +30,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -42,13 +40,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    #'generate_scaffold',
+    # 'generate_scaffold',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -58,9 +56,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'diplom_django.urls'
 
-
 WSGI_APPLICATION = 'diplom_django.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -94,37 +90,36 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-#STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#TEMPLATE_DIRS = (
+# TEMPLATE_DIRS = (
 #    os.path.join(BASE_DIR,  'templates'),
-#)
+# )
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-   'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
 }
 
-#STATICFILES_DIRS = (
+# STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'static'),
-#)
+# )
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-#import os.path
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# import os.path
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
@@ -132,33 +127,21 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
-#PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+# PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-#STATICFILES_DIRS = (
+# STATICFILES_DIRS = (
 #    os.path.join(PROJECT_ROOT, 'static'),
-#)
+# )
 
 f = False
 import psql_cache
-from django.db import connection
 
-import diplom_django.recomen_system.update_ratings as recom
-
-#обновление данных о событиях в базе
+# обновление данных о событиях в базе
 psql_cache.main_func()
 
-#обновление рекомендательных оценок
-#recom.psql_update_ratings()
-
-
-
-
-
-
-
-
-
+# обновление рекомендательных оценок
+# recom.psql_update_ratings()

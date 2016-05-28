@@ -14,12 +14,14 @@ def get_users_data(cur):
         users_data.append(copy.deepcopy(i[0]))
     return users_data
 
+
 def get_events_data(cur):
     events_data = []
     cur.execute("SELECT event_id FROM events_table")
     for i in cur:
         events_data.append(copy.deepcopy(int(i[0])))
     return events_data
+
 
 def get_ratings_data(cur):
     ratings_data = []
@@ -28,8 +30,10 @@ def get_ratings_data(cur):
         ratings_data.append(copy.deepcopy(list(i)))
     return ratings_data
 
+
 def del_system_asses_var(cur):
     cur.execute("DELETE FROM ratings_table WHERE system_asses=" + str(True))
+
 
 def select_not_asses(cur):
     not_asses_array_id = []
@@ -39,21 +43,22 @@ def select_not_asses(cur):
     data_users = get_users_data(cur)
     data_events = get_events_data(cur)
 
-    #убрать оценки с system_asses = true
+    # убрать оценки с system_asses = true
 
     ratings_data = get_ratings_data(cur)
 
-    #формируем те, которые должны быть (все варианты)
+    # формируем те, которые должны быть (все варианты)
     all_var_array = []
 
     for i in data_users:
         for j in data_events:
             new_var = [copy.deepcopy(j), copy.deepcopy(i)]
-            #если нет оценок в базе
-            if (not(new_var in ratings_data)):
-               all_var_array.append(copy.deepcopy(new_var))
+            # если нет оценок в базе
+            if (not (new_var in ratings_data)):
+                all_var_array.append(copy.deepcopy(new_var))
 
     return all_var_array
+
 
 def insert_predicted(cur, predicted_array):
     for i in predicted_array:
@@ -69,18 +74,19 @@ def insert_predicted(cur, predicted_array):
             return
 
         cur.execute(
-             """INSERT INTO ratings_table (event_id, vk_id, assessment, system_asses)
-              VALUES (%(event_id)s, %(vk_id)s, %(assessment)s , %(system_asses)s);""",
+            """INSERT INTO ratings_table (event_id, vk_id, assessment, system_asses)
+             VALUES (%(event_id)s, %(vk_id)s, %(assessment)s , %(system_asses)s);""",
             {'event_id': i[0], 'vk_id': i[1], 'assessment': float(i[2]), 'system_asses': True})
 
-def psql_update_ratings():
-    #db_name = pref.dbname_local
-    #db_user = pref.user_local
-    #db_password = pref.password_local
-    #db_localhost = pref.host_local
-    #db_port = pref.port_local
 
-    #cur, conn = pref.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
+def psql_update_ratings():
+    # db_name = pref.dbname_local
+    # db_user = pref.user_local
+    # db_password = pref.password_local
+    # db_localhost = pref.host_local
+    # db_port = pref.port_local
+
+    # cur, conn = pref.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
 
     cur = connection.cursor()
 
@@ -91,9 +97,9 @@ def psql_update_ratings():
     insert_predicted(cur, predicted_array)
 
     connection.commit()
-    #conn.commit()
-    #pref.disconnect_from_db(cur, conn)
+    # conn.commit()
+    # pref.disconnect_from_db(cur, conn)
 
-    #connection.close()
+    # connection.close()
 
-#psql_update_ratings()
+# psql_update_ratings()

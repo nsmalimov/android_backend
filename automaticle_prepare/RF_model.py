@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from sklearn.ensemble.forest import RandomForestRegressor
-import sys
-import pickle
-import os
 import json
+import pickle
+import sys
 import urllib2
-import math
+
+from sklearn.ensemble.forest import RandomForestRegressor
 
 path_to_file = "work_files"
 
@@ -15,22 +14,24 @@ sys.setdefaultencoding('utf-8')
 sys.getdefaultencoding()
 
 flag = "driving"
-#driving - на общественном транспорте
-#walking - пешком
-#на велосипеде
+
+
+# driving - на общественном транспорте
+# walking - пешком
+# на велосипеде
 
 def get_distance(latitude1, longitude1, latitude2, longitude2, flag):
-    #Элементов на запрос: 100
-    #Элементов за 10 секунд: 100
-    #Элементов за 24 часа: 2500
+    # Элементов на запрос: 100
+    # Элементов за 10 секунд: 100
+    # Элементов за 24 часа: 2500
 
     import time
     time.sleep(0.5)
-    main_str = "http://maps.googleapis.com/maps/api/directions/json?origin="\
-               + str(latitude1) + "," + str(longitude1) +\
-               "&" + "destination=" + str(latitude2) + "," + str(longitude2)\
+    main_str = "http://maps.googleapis.com/maps/api/directions/json?origin=" \
+               + str(latitude1) + "," + str(longitude1) + \
+               "&" + "destination=" + str(latitude2) + "," + str(longitude2) \
                + "&mode=" + flag
-    #print main_str
+    # print main_str
     try:
         response = urllib2.urlopen(main_str)
         data = json.load(response)
@@ -42,15 +43,16 @@ def get_distance(latitude1, longitude1, latitude2, longitude2, flag):
         return "limit"
 
     try:
-       times =  str(data["routes"][0]["legs"][0]["duration"]["text"])
+        times = str(data["routes"][0]["legs"][0]["duration"]["text"])
     except Exception as inst:
-       return "no"
+        return "no"
 
     split_time = times.split(" ")
     if (len(split_time) == 2):
-       return split_time[0]
+        return split_time[0]
     else:
-       return str(int(split_time[0])*60 + int(split_time[2]))
+        return str(int(split_time[0]) * 60 + int(split_time[2]))
+
 
 def Random_forest_func(path):
     input = open(path + "/coordinates/" + "coordinates.pkl", 'r')
@@ -67,22 +69,22 @@ def Random_forest_func(path):
     for i in train_dist:
         if (train_dist[i] == "no"):
             try:
-              latitude1 = i[0]
-              longitude1 = i[1]
+                latitude1 = i[0]
+                longitude1 = i[1]
 
-              latitude2 = i[2]
-              longitude2 = i[3]
+                latitude2 = i[2]
+                longitude2 = i[3]
 
-              new_dist = get_distance(latitude1, longitude1, latitude2, longitude2, flag)
+                new_dist = get_distance(latitude1, longitude1, latitude2, longitude2, flag)
 
-              if (new_dist == "limit"):
-                  print "Google api break"
-                  break
+                if (new_dist == "limit"):
+                    print "Google api break"
+                    break
 
-              new_train_dist[i] = new_dist
-              train_dist[i] = new_dist
+                new_train_dist[i] = new_dist
+                train_dist[i] = new_dist
 
-              count_calculate_dist += 1
+                count_calculate_dist += 1
 
             except Exception as inst:
                 print inst
@@ -104,7 +106,7 @@ def Random_forest_func(path):
 
     regr.fit(X, Y)
 
-    output = open(path + "/scikit_model/" + "scikit_model.pkl" , 'w')
+    output = open(path + "/scikit_model/" + "scikit_model.pkl", 'w')
     pickle.dump(regr, output)
 
     output.close()

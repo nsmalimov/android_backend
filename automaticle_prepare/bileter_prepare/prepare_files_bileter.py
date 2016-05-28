@@ -1,14 +1,16 @@
 # -*_ coding: utf-8 -*-
 
-import sys
-from bileter_get_data import parser
-import pickle
-import os
-from datetime import timedelta
 import copy
+import os
+import pickle
+import sys
+from datetime import timedelta
+
+from bileter_get_data import parser
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
 
 def open_data_file():
     data = []
@@ -19,36 +21,36 @@ def open_data_file():
     inputer.close()
     return data
 
+
 def prepare_time(display_dates_string, duration):
     timestart_new = 0
     timeend_new = 0
     duration_new = 0
 
-    #print display_dates_string, duration
+    # print display_dates_string, duration
     from datetime import datetime
 
     time_split = display_dates_string.split(" ")
     display_dates_string = time_split[-1]
 
-    time_help = timedelta(minutes = 0)
+    time_help = timedelta(minutes=0)
 
     format = '%H:%M'
     timestart_new = datetime.strptime(display_dates_string, format)
-    timestart_new = timedelta(hours = timestart_new.hour) + timedelta(minutes = timestart_new.minute)
-
-
+    timestart_new = timedelta(hours=timestart_new.hour) + timedelta(minutes=timestart_new.minute)
 
     duration_new = datetime.strptime(duration, format)
-    duration_new = timedelta(hours = duration_new.hour) + timedelta(minutes = duration_new.minute)
+    duration_new = timedelta(hours=duration_new.hour) + timedelta(minutes=duration_new.minute)
 
     if (duration_new == time_help):
-        #plus hours
-        timeend_new = timestart_new + timedelta(hours = 3)
-        duration_new = timedelta(hours = 3)
+        # plus hours
+        timeend_new = timestart_new + timedelta(hours=3)
+        duration_new = timedelta(hours=3)
     else:
         timeend_new = timestart_new + duration_new
 
     return timestart_new, timeend_new, duration_new
+
 
 def get_time_array(how_many_days):
     import datetime
@@ -69,14 +71,15 @@ def get_time_array(how_many_days):
 
     return date_array_out
 
+
 def main_func(debug_param, average_kudago, time_array_need):
     main_array = []
     time_array = []
     categories_array_eng = []
     categories_array_rus = []
 
-    if (not(debug_param)):
-       parser.parsing(time_array_need)
+    if (not (debug_param)):
+        parser.parsing(time_array_need)
 
     data = open_data_file()
 
@@ -85,18 +88,18 @@ def main_func(debug_param, average_kudago, time_array_need):
 
     new_array = []
 
-    #расширяем на дни
+    # расширяем на дни
     for i in xrange(len(time_array)):
         new_array.append([])
 
-    #расширяем на категории
+    # расширяем на категории
     for index, i in enumerate(time_array):
-       for j in event_categories_list:
-           new_array[index].append([])
+        for j in event_categories_list:
+            new_array[index].append([])
 
-    #по дням
+    # по дням
     for index, i in enumerate(data):
-        #по событиям в дне
+        # по событиям в дне
         for index1, j in enumerate(i):
             num = event_categories_list.index(j['categories'])
             new_array[index][num].append(j)
@@ -108,7 +111,7 @@ def main_func(debug_param, average_kudago, time_array_need):
         new_data.append([])
 
     for index, i in enumerate(data):
-        #по категориям
+        # по категориям
         for index1, j in enumerate(i):
             if (len(j) != 0):
                 new_data[index].append(j)
@@ -118,18 +121,19 @@ def main_func(debug_param, average_kudago, time_array_need):
     all_eng_categories = []
     all_rus_categories = []
 
-    #по датам
+    # по датам
     for index, i in enumerate(data):
-        #по категориям
+        # по категориям
         for index1, j in enumerate(i):
             if (len(j) == 0):
                 del data[index][index1]
                 continue
-            #по каждому в категории
+            # по каждому в категории
             for index2, k in enumerate(j):
 
-                if (k['images'] != "no" and not(":" in k['images'])):
-                    data[index][index1][index2]['images'] = "http://www.bileter.ru" + data[index][index1][index2]['images']
+                if (k['images'] != "no" and not (":" in k['images'])):
+                    data[index][index1][index2]['images'] = "http://www.bileter.ru" + data[index][index1][index2][
+                        'images']
 
                 data[index][index1][index2]['rank'] = float(average_kudago)
 
@@ -145,7 +149,7 @@ def main_func(debug_param, average_kudago, time_array_need):
                 data[index][index1][index2]['description'] = description
 
                 try:
-                    timestart, timeend, duration = prepare_time(data[index][index1][index2]['display_dates_string'],\
+                    timestart, timeend, duration = prepare_time(data[index][index1][index2]['display_dates_string'], \
                                                                 data[index][index1][index2]['duration'])
                 except:
                     del data[index][index1][index2]
@@ -160,8 +164,8 @@ def main_func(debug_param, average_kudago, time_array_need):
                 all_eng_categories.append(k['categories'])
                 all_rus_categories.append(k['categoriesrus'])
 
-    #телефон
-    #время
+    # телефон
+    # время
 
     main_array = copy.deepcopy(data)
 
@@ -170,13 +174,12 @@ def main_func(debug_param, average_kudago, time_array_need):
 
     return main_array, time_array, categories_array_eng, categories_array_rus
 
-#import datetime
+# import datetime
 
-#date = datetime.date.today()
+# date = datetime.date.today()
 
-#date = [str(date)]
+# date = [str(date)]
 
-#main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, 1, date)
+# main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, 1, date)
 
-#print categories_array_eng
-
+# print categories_array_eng

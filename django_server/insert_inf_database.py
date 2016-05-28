@@ -3,21 +3,22 @@
 import copy
 import random
 
-from diplom_django.worker_directory import vk_api
 from diplom_django.worker_directory import psql_preferences
+from diplom_django.worker_directory import vk_api
 
+vk_id_array = [21747799, 3404185, 31493186, 22679845, 13185289, \
+               165191686, 67415706, 84223404, 10083456, 9453118, \
+               52410586, 31446501, 4908037, 82718748]
 
-vk_id_array = [21747799, 3404185, 31493186, 22679845, 13185289,\
-               165191686, 67415706, 84223404, 10083456, 9453118,\
-               52410586, 31446501, 4908037,82718748]
 
 def insert_vk_id(cur, vk_inform, user_id):
     cur.execute(
-         """INSERT INTO users_table (vk_id, count_friends, age, gender, count_audios, country, count_photos)
-            VALUES (%(vkid)s, %(countfriends)s, %(age)s, %(gender)s, %(count_audios)s, %(country)s, %(countphotos)s);""",
-        {'vkid': user_id, 'countfriends': vk_inform['count_friends'],\
-         'age': vk_inform['age'], 'gender': vk_inform['gender'], 'count_audios': vk_inform['count_audios'],\
-            'country': vk_inform['country'], 'countphotos': vk_inform['count_photos']})
+        """INSERT INTO users_table (vk_id, count_friends, age, gender, count_audios, country, count_photos)
+           VALUES (%(vkid)s, %(countfriends)s, %(age)s, %(gender)s, %(count_audios)s, %(country)s, %(countphotos)s);""",
+        {'vkid': user_id, 'countfriends': vk_inform['count_friends'], \
+         'age': vk_inform['age'], 'gender': vk_inform['gender'], 'count_audios': vk_inform['count_audios'], \
+         'country': vk_inform['country'], 'countphotos': vk_inform['count_photos']})
+
 
 def add_user(cur):
     for i in vk_id_array:
@@ -27,8 +28,8 @@ def add_user(cur):
         except:
             print "error"
 
-def insert_one_rating_table(cur, assesment, vk_id, events_id):
 
+def insert_one_rating_table(cur, assesment, vk_id, events_id):
     cur.execute("SELECT event_id, vk_id FROM ratings_table WHERE\
                  event_id=" + "'" + str(events_id) + "'AND vk_id='" + str(vk_id) + "'")
 
@@ -41,9 +42,9 @@ def insert_one_rating_table(cur, assesment, vk_id, events_id):
         return
 
     cur.execute(
-            """INSERT INTO ratings_table (event_id, vk_id, assessment, system_asses)
-              VALUES (%(event_id)s, %(vk_id)s, %(assessment)s, %(system_asses)s);""",
-            {'event_id': events_id, 'vk_id': vk_id, 'assessment': float(assesment), 'system_asses': False})
+        """INSERT INTO ratings_table (event_id, vk_id, assessment, system_asses)
+          VALUES (%(event_id)s, %(vk_id)s, %(assessment)s, %(system_asses)s);""",
+        {'event_id': events_id, 'vk_id': vk_id, 'assessment': float(assesment), 'system_asses': False})
 
 
 def filling_rating_table(cur):
@@ -58,12 +59,12 @@ def filling_rating_table(cur):
     for i in cur:
         events_id_array.append(copy.deepcopy(i[0]))
 
-    #вставить в среднем 100 событий на пользователя
+    # вставить в среднем 100 событий на пользователя
 
     for i in vk_id_array:
         for j in xrange(100):
             assesment_rand = random.randint(1, 5)
-            event_num = random.randint(0, len(events_id_array)-1)
+            event_num = random.randint(0, len(events_id_array) - 1)
             insert_one_rating_table(cur, assesment_rand, i, events_id_array[event_num])
 
 
@@ -77,10 +78,10 @@ def main_work():
     cur, conn = psql_preferences.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
 
     try:
-        #добавление пользователей
-        #add_user(cur)
+        # добавление пользователей
+        # add_user(cur)
 
-        #добавление оценок событиям
+        # добавление оценок событиям
         filling_rating_table(cur)
 
         conn.commit()
@@ -91,5 +92,3 @@ def main_work():
 
 
 main_work()
-
-

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import datetime
-import sys
-import pickle
-import need_places
-from kudago_get_data import extract_data_places
 import os
+import pickle
+import sys
+
+from kudago_get_data import extract_data_places
+
+import need_places
 
 # название
 # описание
@@ -29,14 +31,16 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 sys.getdefaultencoding()
 
-#sys.path.append("/Users/Nurislam/PycharmProjects/api_kudago")
 
-#сегодняшняя дата
+# sys.path.append("/Users/Nurislam/PycharmProjects/api_kudago")
+
+# сегодняшняя дата
 def get_today_data():
     today_date = datetime.date.today()
     return today_date
 
-#извлечь данные
+
+# извлечь данные
 def data_place_func(filename):
     def extract_data(filename):
         f = open(filename, 'r')
@@ -48,7 +52,7 @@ def data_place_func(filename):
         to_del_array = []
         for i in xrange(len(events_data)):
             if (events_data[i]['location']['slug'] != u'spb'):
-               to_del_array.append(events_data[i])
+                to_del_array.append(events_data[i])
         for i in to_del_array:
             events_data.remove(i)
         return events_data
@@ -57,13 +61,14 @@ def data_place_func(filename):
     events_data_place = filter_data_no_spb(events_data_place)
     return events_data_place
 
-#фильтруем данные
+
+# фильтруем данные
 def filter_place_need(data_place, need_place):
     new_data_place = []
 
     for i in data_place:
         if i['categories'][0]['slug'] in need_place and i['lat_lon'] != None:
-           new_data_place.append(i)
+            new_data_place.append(i)
 
     data_place = new_data_place
     array_to_del = []
@@ -72,14 +77,16 @@ def filter_place_need(data_place, need_place):
     for i in data_place:
         some_attr = i.keys()
         for j in some_attr:
-           try:
-             num = array_keys.index(j)
-           except: 
-             array_keys.append(j)
+            try:
+                num = array_keys.index(j)
+            except:
+                array_keys.append(j)
 
     for i in xrange(len(array_keys)):
-        if (array_keys[i] == u'lat_lon' or array_keys[i] == u'rank' or array_keys[i] == u'categories' or array_keys[i] == u'title' or array_keys[i] == u'description'\
-         or array_keys[i] == u'timetable' or array_keys[i] == u'address' or array_keys[i] == u'phone' or array_keys[i] == u'url' or array_keys[i] == u'images'):
+        if (array_keys[i] == u'lat_lon' or array_keys[i] == u'rank' or array_keys[i] == u'categories' or array_keys[
+            i] == u'title' or array_keys[i] == u'description' \
+                    or array_keys[i] == u'timetable' or array_keys[i] == u'address' or array_keys[i] == u'phone' or
+                    array_keys[i] == u'url' or array_keys[i] == u'images'):
             None
         else:
             array_to_del.append(array_keys[i])
@@ -90,10 +97,9 @@ def filter_place_need(data_place, need_place):
         all_rank_array.append(data_place[i]['rank'])
         array_key = data_place[i]
         for j in array_to_del:
-              if (j in array_key):
-                 del data_place[i][j]
+            if (j in array_key):
+                del data_place[i][j]
         time = data_place[i]['timetable']
-
 
         try:
             data_place[i]['images'] = "http://kudago.com" + data_place[i]['images'][0]
@@ -110,8 +116,8 @@ def filter_place_need(data_place, need_place):
         else:
             coord = coordinates.split(",")
         if (len(coord) == 2):
-                data_place[i]['latitude'] = float(coord[0])
-                data_place[i]['longitude'] = float(coord[1])
+            data_place[i]['latitude'] = float(coord[0])
+            data_place[i]['longitude'] = float(coord[1])
 
     max_rank = float(max(all_rank_array))
 
@@ -124,7 +130,7 @@ def filter_place_need(data_place, need_place):
 
         try:
             num_index = data_place[i]['categoriesrus'].index("(")
-            data_place[i]['categoriesrus'] = data_place[i]['categoriesrus'][0:num_index-1]
+            data_place[i]['categoriesrus'] = data_place[i]['categoriesrus'][0:num_index - 1]
         except:
             None
 
@@ -133,30 +139,32 @@ def filter_place_need(data_place, need_place):
         data_place[i]['description'] = data_place[i]['description'].replace(u"<p>", "").replace(u"</p>", "")
 
         if (data_place[i]['phone'] == ''):
-                data_place[i]['phone'] = u"no"
+            data_place[i]['phone'] = u"no"
         if (data_place[i]['url'] == ''):
-                data_place[i]['url'] = u"no"
+            data_place[i]['url'] = u"no"
         if (data_place[i]['title'] == ''):
-                data_place[i]['title'] = u"no"
+            data_place[i]['title'] = u"no"
         if (data_place[i]['description'] == ''):
-                data_place[i]['description'] = u"no"
+            data_place[i]['description'] = u"no"
 
     for i in xrange(len(data_place)):
-      try:
-        if (data_place[i]['address'] == ''):
+        try:
+            if (data_place[i]['address'] == ''):
                 del data_place[i]
-        if (data_place[i]['display_dates_string'] == ''):
+            if (data_place[i]['display_dates_string'] == ''):
                 del data_place[i]
-        if (len(data_place[i]['categories']) == 0):
+            if (len(data_place[i]['categories']) == 0):
                 del data_place[i]
 
-        #нужно добавить
-        data_place[i]['categories'] = data_place[i]['categories'][0]['slug']
-        
-        data_place[i]['ticket'] = u"no"
-      except: None
-    
+            # нужно добавить
+            data_place[i]['categories'] = data_place[i]['categories'][0]['slug']
+
+            data_place[i]['ticket'] = u"no"
+        except:
+            None
+
     return data_place
+
 
 def get_need_time(how_much_days):
     today_date = get_today_data()
@@ -170,10 +178,11 @@ def get_need_time(how_much_days):
         last_date = date
     return date_array_out
 
+
 def filter_time(new_time):
     if (len(new_time) != 11):
         new_time_split = new_time.split(":")
-        
+
         if (len(new_time_split[0]) == 1):
             new_time = "0" + new_time
         new_time_split = new_time.split("-")
@@ -183,25 +192,26 @@ def filter_time(new_time):
 
         new_time = new_time_split[0] + "-" + new_time_split[1]
 
-    return new_time 
+    return new_time
+
 
 def get_good_time(time):
     time = time.lower()
     time = time.replace(u".", u":")
-    #ежедневно 10:30-20:30
+    # ежедневно 10:30-20:30
 
-    #круглосуточно
+    # круглосуточно
     if (time == u"круглосуточно"):
         return u"пн 00:00-00:00;вт 00:00-00:00;ср 00:00-00:00;чт 00:00-00:00;пт 00:00-00:00;сб 00:00-00:00;вс 00:00-00:00"
 
-    #строка без времени
+    # строка без времени
     if (time.replace(" ", "").replace(",", "").isalpha() or time == ""):
         return 0
 
     day_array = [u"пн", u"вт", u"ср", u"чт", u"пт", u"сб", u"вс"]
 
     answer = ""
-                           
+
     if (len(time) == len(u"ср-сб 20.00-06.00") or len(time) == len(u"пт-сб 22.00–6.00")):
         time = time.replace("24:", "00:")
         if (time[0] == u"8"):
@@ -228,14 +238,15 @@ def get_good_time(time):
             return 0
 
         for i in xrange(num_day_1, num_day_2, 1):
-             answer = answer + day_array[i] + u" " + new_time + u";"
+            answer = answer + day_array[i] + u" " + new_time + u";"
 
         if (answer == ""):
             return 0
     else:
         return 0
 
-    return answer[0:len(answer)-1]
+    return answer[0:len(answer) - 1]
+
 
 def change_timetable(data_place):
     data_answer = []
@@ -249,35 +260,38 @@ def change_timetable(data_place):
 
     return data_answer
 
-#разбиваем по категориям
+
+# разбиваем по категориям
 def filter_categories(data_place, need_place):
     main_array = []
     need_place_new = []
 
     for i in need_place:
         if (i in need_place):
-           need_place_new.append(i)
+            need_place_new.append(i)
 
     need_place = need_place_new
 
     for i in need_place:
-         main_array.append([])
+        main_array.append([])
 
-    #по категориям
+    # по категориям
     for i in data_place:
         num = need_place.index(i['categories'])
         main_array[num].append(i)
 
     return main_array, need_place
 
+
 def check_time_work(time_work, one_day_week):
     time_work_split = time_work.split(u";")
     for i in time_work_split:
-         day_w = i[0] + i[1]
-         if (day_w == one_day_week):
-             i_split = i.split(u" ")
-             return i_split[1]
+        day_w = i[0] + i[1]
+        if (day_w == one_day_week):
+            i_split = i.split(u" ")
+            return i_split[1]
     return 0
+
 
 def time_prepare(time):
     num = time.index(u":") + 3
@@ -285,7 +299,8 @@ def time_prepare(time):
     time = time[0:num] + "-" + end_s
     return time
 
-#задача сформировать массив на 7 дней
+
+# задача сформировать массив на 7 дней
 def create_array_good_time(data_place, time_array_need):
     day_array = [u"пн", u"вт", u"ср", u"чт", u"пт", u"сб", u"вс"]
     from datetime import datetime
@@ -305,7 +320,7 @@ def create_array_good_time(data_place, time_array_need):
         date = last_date + delta
         need_days.append(str(date))
         need_days_help.append(date)
-        need_weeks_day.append(day_array[date.isoweekday()- 1])
+        need_weeks_day.append(day_array[date.isoweekday() - 1])
         last_date = date
 
     events_array = []
@@ -322,11 +337,11 @@ def create_array_good_time(data_place, time_array_need):
     format = '%H:%M'
     from datetime import datetime, timedelta
 
-    #распределяем по дням
-    #по событиям
+    # распределяем по дням
+    # по событиям
     for i in data_place:
         backup = i.copy()
-        #проходим внутри категории
+        # проходим внутри категории
         for k in xrange(len(need_weeks_day)):
             get_time = check_time_work(i['display_dates_string'], need_weeks_day[k])
             if (get_time != 0):
@@ -341,25 +356,26 @@ def create_array_good_time(data_place, time_array_need):
 
                 del backup['display_dates_string']
 
-                #елси меньше 180 минут, то фиксированно
+                # елси меньше 180 минут, то фиксированно
                 try:
                     minutes = backup['timeend'] - backup['timestart']
-                    if (minutes <= timedelta(minutes = 180)):
+                    if (minutes <= timedelta(minutes=180)):
                         backup['fixedtime'] = True
                         backup['duration'] = minutes
                     else:
                         backup['fixedtime'] = False
 
-                        #настроить продолжительность для каждого события
-                        backup['duration'] = timedelta(minutes = 90)
+                        # настроить продолжительность для каждого события
+                        backup['duration'] = timedelta(minutes=90)
 
                 except:
-                        None
+                    None
 
-                backup['timestart'] =  timedelta(hours = backup['timestart'].hour) + timedelta(minutes = backup['timestart'].minute)
-                backup['timeend'] = timedelta(hours = backup['timeend'].hour) + timedelta(minutes = backup['timeend'].minute)
+                backup['timestart'] = timedelta(hours=backup['timestart'].hour) + timedelta(
+                    minutes=backup['timestart'].minute)
+                backup['timeend'] = timedelta(hours=backup['timeend'].hour) + timedelta(
+                    minutes=backup['timeend'].minute)
                 main_array[k].append(backup.copy())
-
 
     events_day = main_array
     main_array = []
@@ -391,6 +407,7 @@ def create_array_good_time(data_place, time_array_need):
 
     return main_array_new, event_wich_use
 
+
 def get_all_events_name(data_place):
     dict_events = {}
     count = 0
@@ -398,9 +415,10 @@ def get_all_events_name(data_place):
         if (i['categories'][0]['slug'] in dict_events.values()):
             None
         else:
-           dict_events[count] = i['categories'][0]['slug']
-           count += 1
+            dict_events[count] = i['categories'][0]['slug']
+            count += 1
     return dict_events.values()
+
 
 def get_all_events_name_1(data_place):
     dict_events = {}
@@ -409,9 +427,10 @@ def get_all_events_name_1(data_place):
         if (i['categories'] in dict_events.values()):
             None
         else:
-           dict_events[count] = i['categories']
-           count += 1
+            dict_events[count] = i['categories']
+            count += 1
     return dict_events.values()
+
 
 def get_rus_name_events(data_place, need_place):
     dict_events = {}
@@ -421,77 +440,80 @@ def get_rus_name_events(data_place, need_place):
         if (i['categories'][0]['slug'] in dict_events.values()):
             None
         else:
-           if (i['categories'][0]['slug'] in need_place):
-              dict_events[count] = i['categories'][0]['slug']
-              dict_events1[count] = i['categories'][0]['name']
-              count += 1
+            if (i['categories'][0]['slug'] in need_place):
+                dict_events[count] = i['categories'][0]['slug']
+                dict_events1[count] = i['categories'][0]['name']
+                count += 1
     array_categories = dict_events1.values()
     for i in xrange(len(array_categories)):
         try:
             num_index = array_categories[i].index("(")
-            array_categories[i] = array_categories[i][0:num_index-1]
+            array_categories[i] = array_categories[i][0:num_index - 1]
         except:
             None
     return array_categories
 
+
 def work_with_time(time):
-        time = time_prepare(time)
-        time1 = time[:8] + u':' + time[9:]
-        time = time1
-        time_split = time.split(u"-")
+    time = time_prepare(time)
+    time1 = time[:8] + u':' + time[9:]
+    time = time1
+    time_split = time.split(u"-")
 
-        time_start = time_split[0]
-        time_end = time_split[1]
+    time_start = time_split[0]
+    time_end = time_split[1]
 
-        time_end_split = time_end.split(u":")
-        t0_h = time_end_split[0]
-        t0_m = time_end_split[1]
-        if (t0_m[0] == "0"):
-           t0_m = t0_m[1]
+    time_end_split = time_end.split(u":")
+    t0_h = time_end_split[0]
+    t0_m = time_end_split[1]
+    if (t0_m[0] == "0"):
+        t0_m = t0_m[1]
 
-        time_start_split = time_start.split(u":")
-        t1_h = time_start_split[0]
-        t1_m = time_start_split[1]
-        if (t1_m[0] == "0"):
-           t1_m = t1_m[1]
-  
-        t0_h = int(t0_h)
-        t0_m = int(t0_m)
+    time_start_split = time_start.split(u":")
+    t1_h = time_start_split[0]
+    t1_m = time_start_split[1]
+    if (t1_m[0] == "0"):
+        t1_m = t1_m[1]
 
-        t1_h = int(t1_h)
-        t1_m = int(t1_m)
+    t0_h = int(t0_h)
+    t0_m = int(t0_m)
 
-        h_m = (t1_h - t0_h) * 60
+    t1_h = int(t1_h)
+    t1_m = int(t1_m)
 
-        m_m = (t1_m - t0_m)
+    h_m = (t1_h - t0_h) * 60
 
-        if (m_m < 0):
-            m_m = (60 - t0_m) + t1_m
-            h_m = h_m - 1
+    m_m = (t1_m - t0_m)
 
-        all_minutes = m_m + h_m
+    if (m_m < 0):
+        m_m = (60 - t0_m) + t1_m
+        h_m = h_m - 1
 
-        if (all_minutes < 0):
-            all_minutes = -1 * all_minutes
+    all_minutes = m_m + h_m
 
-        return all_minutes
+    if (all_minutes < 0):
+        all_minutes = -1 * all_minutes
+
+    return all_minutes
+
 
 def is_file_head(time_array):
     path = os.path.dirname(os.path.abspath(__file__))
     filename = path + "/places/" + "head_array.pkl"
 
     if os.path.isfile(filename):
-       filename = path + "/places/" + "time_check.pkl"
-       input = open(filename, 'r')
-       time_check_array = pickle.load(input)
-       input.close()
+        filename = path + "/places/" + "time_check.pkl"
+        input = open(filename, 'r')
+        time_check_array = pickle.load(input)
+        input.close()
 
-       for i in xrange(len(time_array)):
-           if (time_array[i] != time_check_array[i]):
-               return False
-       return True
+        for i in xrange(len(time_array)):
+            if (time_array[i] != time_check_array[i]):
+                return False
+        return True
     else:
-       return False
+        return False
+
 
 def get_head_array(time_array):
     path = os.path.dirname(os.path.abspath(__file__))
@@ -507,6 +529,7 @@ def get_head_array(time_array):
 
     return main_array, time_array, categories_array_eng, categories_array_rus
 
+
 def write_check_files(main_array, time_array, categories_array_eng, categories_array_rus):
     path = os.path.dirname(os.path.abspath(__file__))
     filename = path + "/places/" + "head_array.pkl"
@@ -521,17 +544,17 @@ def write_check_files(main_array, time_array, categories_array_eng, categories_a
     pickle.dump(time_array, output)
     output.close()
 
-def main_func(debug_param, time_array_need):
 
+def main_func(debug_param, time_array_need):
     try:
-        if (not(debug_param)):
+        if (not (debug_param)):
             extract_data_places.extract_data()
     except:
         print "Pending places"
 
     time_array = time_array_need
 
-    #if (is_file_head(time_array)):
+    # if (is_file_head(time_array)):
     #    print "don't calculate places"
     #    return get_head_array(time_array)
 
@@ -542,8 +565,8 @@ def main_func(debug_param, time_array_need):
 
     all_events = get_all_events_name(data_place)
 
-    #print all_events[0]
-    #for i in all_events:
+    # print all_events[0]
+    # for i in all_events:
     #    for j in i:
     #        print i['categoriesrus']
 
@@ -555,17 +578,17 @@ def main_func(debug_param, time_array_need):
 
     need_place_rus = get_rus_name_events(data_place, need_place_eng)
 
-    #print need_place_rus
+    # print need_place_rus
 
-    #массив контролируем какие данные будем брать по категориям мест
+    # массив контролируем какие данные будем брать по категориям мест
     data_place = filter_place_need(data_place, need_place_eng)
 
-    #приводим время к виду пн 00:00-24:00;вт 00:00-24:00;
+    # приводим время к виду пн 00:00-24:00;вт 00:00-24:00;
     data_place = change_timetable(data_place)
 
-    #по категориям категорий
+    # по категориям категорий
 
-    #распределеяем по дням в неделе
+    # распределеяем по дням в неделе
     main_array, need_place = create_array_good_time(data_place, time_array)
 
     categories_array_rus = []
@@ -577,14 +600,14 @@ def main_func(debug_param, time_array_need):
     main_array, categories_array_eng, categories_array_rus = \
         need_places.prepare_categories(main_array, categories_array_eng, categories_array_rus)
 
-    #write_check_files(main_array, time_array, categories_array_eng, categories_array_rus)
+    # write_check_files(main_array, time_array, categories_array_eng, categories_array_rus)
     print "new write"
 
     return main_array, time_array, categories_array_eng, categories_array_rus
 
-#пустых категорий нет
+# пустых категорий нет
 
-#date = get_today_data()
+# date = get_today_data()
 # date = ["2015-06-03"]
 #
 # main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, date)
@@ -597,19 +620,19 @@ def main_func(debug_param, time_array_need):
 #
 # print count
 
-#for i in categories_array_rus:
+# for i in categories_array_rus:
 #    print i
 
-#for i in categories_array_rus:
+# for i in categories_array_rus:
 #    print i
-#for i in categories_array_rus:
+# for i in categories_array_rus:
 #    print i
-#for i in main_array:
+# for i in main_array:
 #    for j in i:
 #        for k in j:
 #            print k['categoriesrus']
 
-#print time_array
+# print time_array
 
 # for index1, i in enumerate(main_array):
 #         count = 0
@@ -623,8 +646,3 @@ def main_func(debug_param, time_array_need):
 #             for index3, k in enumerate(j):
 #                 print k['id']
 #         print "next"
-
-
-
-
-

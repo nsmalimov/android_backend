@@ -11,12 +11,12 @@ else:
 
 
 def get_wich_days():
-    #номер месяца - число без 0
-    #"06-18-2015"
+    # номер месяца - число без 0
+    # "06-18-2015"
     dates = []
     path = folder_direct
 
-    path  = path + "events/"
+    path = path + "events/"
 
     for file in glob.glob(path + "*.pkl"):
         file = file.replace(path, "")
@@ -35,6 +35,6 @@ def get_wich_days():
 
         dates.append(month + "-" + days + "-" + years)
 
-    #dates.append("6-15-2015")
-    #print dates
+    # dates.append("6-15-2015")
+    # print dates
     return dates

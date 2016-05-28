@@ -3,9 +3,10 @@ import json
 
 import requests
 
-#модуль для тестирования работы сервера
+# модуль для тестирования работы сервера
 server_url_net = "http://52.28.95.86:80/"
 server_url_local = "http://127.0.0.1:8000/"
+
 
 def create_sample_dict():
     response_data = {}
@@ -24,58 +25,47 @@ def create_sample_dict():
 
     return response_data
 
-#GET request
+
+# GET request
 def do_get_request(server_url):
     r = requests.get(server_url + "preferences")
     print r
     return r.json()
 
+
 # def do_get_request(server_url):
 #     r = requests.get(server_url + "route")
 #     return r.json()
 
-#POST request
+# POST request
 def do_post_request(server_url, file_to_post):
-    r = requests.post(server_url + "route", data =  json.dumps(file_to_post))
+    r = requests.post(server_url + "route", data=json.dumps(file_to_post))
     print r
     return r.json()
 
-#from_get = do_get_request(server_url_net)
-#print from_get
 
-#string = server_url_local + "route"
-#from_get = do_get_request(server_url_local + "route")
+# from_get = do_get_request(server_url_net)
+# print from_get
 
-#print from_get
+# string = server_url_local + "route"
+# from_get = do_get_request(server_url_local + "route")
+
+# print from_get
 
 dict_test = create_sample_dict()
 
 content = do_post_request(server_url_net, dict_test)
 
 print content
-#print content
-#print content['medium_place']
-#print content
-#print dict_test
-#content = do_post_request(server_url_local + "route", dict_test)
+# print content
+# print content['medium_place']
+# print content
+# print dict_test
+# content = do_post_request(server_url_local + "route", dict_test)
 
-#print content
+# print content
 
 
-#print content[0]
-#for i in content[0:-2]:
+# print content[0]
+# for i in content[0:-2]:
 #    print i.keys()
-
-
-
-
-
-
-
-
-
-
-
-
-
-

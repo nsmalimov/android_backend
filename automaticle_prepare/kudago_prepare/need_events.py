@@ -6,16 +6,17 @@ need_events = ['tour', 'kids', 'theater', 'show', 'party', 'exhibition',
                'evening', 'games', 'festival', 'quest', 'night', 'sport', 'photo',
                'fair', 'cinema']
 
-#tour -> excursions
 
-#замена русских названий
+# tour -> excursions
+
+# замена русских названий
 
 def prepare_categories(main_array, categories_array_eng, categories_array_rus):
-    #по дням
+    # по дням
     for index, i in enumerate(main_array):
-        #по категориям в день
+        # по категориям в день
         for index1, j in enumerate(i):
-            #по событиям в категории
+            # по событиям в категории
 
             for index2, k in enumerate(j):
                 if (k['categoriesrus'] == u"Детские"):
@@ -31,7 +32,7 @@ def prepare_categories(main_array, categories_array_eng, categories_array_rus):
                     main_array[index][index1][index2]['categoriesrus'] = u"Театры"
 
                 if (k['categories'] == u"tour"):
-                     main_array[index][index1][index2]['categories'] = u"excursions"
+                    main_array[index][index1][index2]['categories'] = u"excursions"
 
     try:
         categories_array_eng[categories_array_eng.index(u"tour")] = u"excursions"
@@ -57,7 +58,6 @@ def prepare_categories(main_array, categories_array_eng, categories_array_rus):
         categories_array_rus[categories_array_rus.index(u"Comedy club / Камеди клаб")] = u"Камеди клаб"
     except:
         None
-
 
     for i in xrange(len(categories_array_eng)):
         categories_array_eng[i] = categories_array_eng[i].replace("-", "")

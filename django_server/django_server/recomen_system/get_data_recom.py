@@ -5,6 +5,7 @@ import copy
 import diplom_django.worker_directory.psql_preferences as pref
 from django.db import connection
 
+
 def connect_to_db():
     db_name = pref.dbname_local
     db_user = pref.user_local
@@ -14,9 +15,10 @@ def connect_to_db():
 
     cur, conn = pref.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
 
-    #cur = connection.cursor()
+    # cur = connection.cursor()
 
     return cur, conn
+
 
 def get_users_data(cur):
     users_data = []
@@ -24,6 +26,7 @@ def get_users_data(cur):
     for i in cur:
         users_data.append(copy.deepcopy(list(i)))
     return users_data
+
 
 def get_events_data(cur):
     events_data = []
@@ -34,6 +37,7 @@ def get_events_data(cur):
         events_data.append(copy.deepcopy(help_rewrite))
     return events_data
 
+
 def get_ratings_data(cur):
     ratings_data = []
     cur.execute("SELECT event_id, vk_id, assessment FROM ratings_table")
@@ -41,22 +45,18 @@ def get_ratings_data(cur):
         ratings_data.append(copy.deepcopy(list(i)))
     return ratings_data
 
+
 def main_get_data_func():
-    #cur, conn = connect_to_db()
+    # cur, conn = connect_to_db()
 
     cur = connection.cursor()
-    users_data = get_users_data(cur) #[3404185, 214, 0, 2, 226, 0, 18]
+    users_data = get_users_data(cur)  # [3404185, 214, 0, 2, 226, 0, 18]
 
-    events_data = get_events_data(cur) #[1, 110, 1251, 65, 2, 0, 1]
+    events_data = get_events_data(cur)  # [1, 110, 1251, 65, 2, 0, 1]
 
-    ratings_data = get_ratings_data(cur) #[1, 21747799, 5] [events_id, vk_id, assessment]
+    ratings_data = get_ratings_data(cur)  # [1, 21747799, 5] [events_id, vk_id, assessment]
 
-    #pref.disconnect_from_db(cur, conn)
-    #connection.close()
+    # pref.disconnect_from_db(cur, conn)
+    # connection.close()
 
     return users_data, events_data, ratings_data
-
-
-
-
-
