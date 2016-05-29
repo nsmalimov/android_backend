@@ -97,7 +97,7 @@ def main_filter_data(events_data, need_places):
     for i in xrange(len(events_data)):
         # [0] [1] проверка по всем категориям
         if (events_data[i]['location']['slug'] != u'spb' or not (
-            events_data[i]['categories'][0]['slug'] in need_places)):
+                    events_data[i]['categories'][0]['slug'] in need_places)):
             to_del_array.append(events_data[i])
 
     for i in to_del_array:

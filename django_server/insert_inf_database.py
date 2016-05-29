@@ -6,9 +6,7 @@ import random
 from diplom_django.worker_directory import psql_preferences
 from diplom_django.worker_directory import vk_api
 
-vk_id_array = [21747799, 3404185, 31493186, 22679845, 13185289, \
-               165191686, 67415706, 84223404, 10083456, 9453118, \
-               52410586, 31446501, 4908037, 82718748]
+vk_id_array = []
 
 
 def insert_vk_id(cur, vk_inform, user_id):
@@ -78,9 +76,6 @@ def main_work():
     cur, conn = psql_preferences.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
 
     try:
-        # добавление пользователей
-        # add_user(cur)
-
         # добавление оценок событиям
         filling_rating_table(cur)
 

@@ -32,8 +32,6 @@ sys.setdefaultencoding('utf-8')
 sys.getdefaultencoding()
 
 
-# sys.path.append("/Users/Nurislam/PycharmProjects/api_kudago")
-
 # сегодняшняя дата
 def get_today_data():
     today_date = datetime.date.today()

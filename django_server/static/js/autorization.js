@@ -1,6 +1,5 @@
 $(document).ready(
     function () {
-        //alert("111");
         var serverHostName = window.location.hostname;
 
         var serverProtocolName = window.location.protocol;
@@ -11,7 +10,7 @@ $(document).ready(
         }
         var serverPath = serverProtocolName + "//" + serverHostName + ":" + portName + "/";
 
-        $("#vkIdInput").val("21747799");
+        $("#vkIdInput").val("1");
         $('#button_sent').click(function () {
             window.location.href = serverPath + "routeinfrom_" + $("#vkIdInput").val();
         });

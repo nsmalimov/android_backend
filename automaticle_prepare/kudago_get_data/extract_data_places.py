@@ -6,7 +6,7 @@ import urllib2
 
 
 def extract_data():
-    username = 'amobile:uoPh1Ni4'
+    username = ''
     password = ''
 
     request = urllib2.Request("https://kudago.com/export/whole/places.json")
@@ -19,5 +19,3 @@ def extract_data():
     path += 'places.pkl'
 
     pickle.dump(data, open(path, 'w'))
-
-    # extract_data()

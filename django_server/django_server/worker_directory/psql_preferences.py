@@ -20,6 +20,6 @@ def disconnect_from_db(cur, conn):
 
 dbname_local = "onecityday_spb"
 user_local = "postgres"
-password_local = "Gfhybirflehfxjr129238"
+password_local = ""
 host_local = "localhost"
 port_local = "5432"

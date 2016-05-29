@@ -5,7 +5,7 @@ import glob
 local = False
 
 if (local):
-    folder_direct = "/Users/Nurislam/Documents/data_files/"
+    folder_direct = "/data_files/"
 else:
     folder_direct = "/home/azureuser/data_files/"
 

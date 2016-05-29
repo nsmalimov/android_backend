@@ -5,10 +5,8 @@ import pickle
 import urllib2
 
 
-# Pending
-
 def extract_data():
-    username = 'amobile:uoPh1Ni4'
+    username = ''
     password = ''
 
     request = urllib2.Request("https://kudago.com/export/whole/events.json")
@@ -20,5 +18,3 @@ def extract_data():
     path = os.path.dirname(os.path.abspath(__file__)) + "/data/"
     path += 'events.pkl'
     pickle.dump(data, open(path, 'w'))
-
-    # extract_data()

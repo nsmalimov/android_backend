@@ -218,8 +218,8 @@ $(document).ready(
         $('#checkbox_1').click(function () {
             if ($(this).is(':checked')) {
                 $('.form-group').show();
-                $('#edit_1').val("Санкт-Петербург,")
-                $('#edit_2').val("Санкт-Петербург,")
+                $('#edit_1').val("Санкт-Петербург,");
+                $('#edit_2').val("Санкт-Петербург,");
                 $('#form_1').hide();
                 $('#form_2').hide();
                 $('#text_1').hide();

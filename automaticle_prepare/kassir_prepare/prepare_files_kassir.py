@@ -108,7 +108,7 @@ def get_duration(description):
         duration = try_get_duration(desc_split)
         return duration
     elif (u"Продолжительность:") in desc_split or (u"минут") in desc_split or (u"час") in desc_split or (
-    u"часа") in desc_split:
+            u"часа") in desc_split:
         duration = try_get_duration(desc_split)
         return duration
     else:

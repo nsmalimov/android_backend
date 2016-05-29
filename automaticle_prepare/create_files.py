@@ -335,16 +335,12 @@ def get_time_array(how_many_days, flag):
 
 def create_work_files():
     # парсинг на эту неделю и на следующую
-    # time_array_need = ['2015-06-26', '2015-06-27', '2015-06-28',\
-    #                   '2015-06-29', '2015-06-30', '2015-07-01',\
-    #                   '2015-07-02']
-
     time_array_need = get_time_array(7, "next")
 
     local = True
 
     if (local):
-        path = "/Users/Nurislam/Downloads/route_builder-master/automaticle_prepare/"
+        path = "/automaticle_prepare/"
     else:
         path = "/home/azureuser/data_files/"
 
@@ -371,57 +367,54 @@ def create_work_files():
     write_log_file("kudago places end", path, False)
     print "kudago places end"
 
-    # average_kudago = 1
-    # average_kudago = get_avarege_kudago(array_events, array_places)
+    average_kudago = 1
+    average_kudago = get_avarege_kudago(array_events, array_places)
 
+    debug_param = False
 
-    # debug_param = False
+    array_kassir, time_array, cat_eng_kassir, cat_rus_kassir = \
+        prepare_files_kassir.main_func(debug_param, average_kudago, copy.deepcopy(time_array_need))
+    write_log_file("kassir parser end", path, False)
+    print "kassir parser end"
 
-    # array_kassir, time_array, cat_eng_kassir, cat_rus_kassir =\
-    #         prepare_files_kassir.main_func(debug_param, average_kudago, copy.deepcopy(time_array_need))
-    # write_log_file("kassir parser end", path, False)
-    # print "kassir parser end"
+    array_bileter, time_array, cat_eng_bileter, cat_rus_bileter = \
+        prepare_files_bileter.main_func(debug_param, average_kudago, copy.deepcopy(time_array_need))
+    write_log_file("bileter parser end", path, False)
+    print "bileter parser end"
 
+    union_cat_rus = cat_rus_places + list(set(cat_rus_events + cat_rus_kassir + cat_rus_bileter))
+    write_categories_file(union_cat_rus, path)
 
-    # array_bileter, time_array, cat_eng_bileter, cat_rus_bileter =\
-    #        prepare_files_bileter.main_func(debug_param, average_kudago, copy.deepcopy(time_array_need))
-    # write_log_file("bileter parser end", path, False)
-    # print "bileter parser end"
+    union_parsers, union_cat_parsers = \
+        union_parsers_func(array_kassir, array_bileter, cat_eng_kassir, cat_eng_bileter)
 
-    # union_cat_rus = cat_rus_places + list(set(cat_rus_events + cat_rus_kassir + cat_rus_bileter))
-    # write_categories_file(union_cat_rus, path)
+    # объединение данных эвентов и парсеров
+    union_events_parsers, union_cat_events_parsers = \
+        union_parsers_func(union_parsers, array_events, union_cat_parsers, cat_eng_events)
 
-    # union_parsers, union_cat_parsers = \
-    #         union_parsers_func(array_kassir, array_bileter, cat_eng_kassir, cat_eng_bileter)
+    # объединение данных с местами
+    main_array, main_cat_array = \
+        union_parsers_func(union_events_parsers, array_places, union_cat_events_parsers, cat_eng_places)
 
-    # #объединение данных эвентов и парсеров
-    # union_events_parsers, union_cat_events_parsers = \
-    #         union_parsers_func(union_parsers, array_events, union_cat_parsers, cat_eng_events)
+    write_events(main_array, time_array, path)
+    write_log_file("events file end", path, False)
+    print "events file end"
 
-    # #объединение данных с местами
-    # main_array, main_cat_array = \
-    #         union_parsers_func(union_events_parsers, array_places, union_cat_events_parsers, cat_eng_places)
+    flag_rf = False
 
+    all_mix_array = train_model(main_array, path, flag_rf)
+    write_log_file("RF model end", path, False)
+    print "RF model end"
 
-    # write_events(main_array, time_array, path)
-    # write_log_file("events file end", path, False)
-    # print "events file end"
+    if (len(all_mix_array) != 0):
+        safety_write_coordinates(path, all_mix_array)
+    else:
+        write_log_file("empty return to coordinates", path, False)
+        print "empty return to coordinates"
 
-    # flag_rf = False
-
-    # all_mix_array = train_model(main_array, path, flag_rf)
-    # write_log_file("RF model end", path, False)
-    # print "RF model end"
-
-    # if (len(all_mix_array) != 0):
-    #     safety_write_coordinates(path, all_mix_array)
-    # else:
-    #     write_log_file("empty return to coordinates", path, False)
-    #     print "empty return to coordinates"
-
-    # create_dist_matrix(path)
-    # write_log_file("distance matrix end", path, False)
-    # print "distance matrix end"
+    create_dist_matrix(path)
+    write_log_file("distance matrix end", path, False)
+    print "distance matrix end"
 
 
 start_time = time.time()

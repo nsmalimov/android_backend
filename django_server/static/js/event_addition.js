@@ -67,6 +67,5 @@ $(document).ready(
         else {
             $('#siteHref').attr('href', json_create['site_url']);
         }
-        //alert("111");
     }
 );
