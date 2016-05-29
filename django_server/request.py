@@ -32,6 +32,7 @@ def do_get_request(server_url):
     print r
     return r.json()
 
+
 def do_post_request(server_url, file_to_post):
     r = requests.post(server_url + "route", data=json.dumps(file_to_post))
     print r
