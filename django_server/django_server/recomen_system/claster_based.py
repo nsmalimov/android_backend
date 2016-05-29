@@ -6,7 +6,6 @@ import clastering
 
 def rating_dict_create(ratings_data):
     dict_rate = {}
-    # event_id, vk_id, assessment
 
     for i in ratings_data:
         try:
@@ -18,8 +17,6 @@ def rating_dict_create(ratings_data):
 
 
 def use_clastering(users_data, ratings_data):
-    # event_id, vk_id, assessment
-
     rating_dict = rating_dict_create(ratings_data)
 
     predict_array = []
@@ -57,7 +54,6 @@ def use_clastering(users_data, ratings_data):
 
 
 def use_clastering_single(event_id, vk_id, users_data, ratings_data):
-    # event_id, vk_id, assessment
     rating_dict = rating_dict_create(ratings_data)
 
     # кластеризовать пользователей

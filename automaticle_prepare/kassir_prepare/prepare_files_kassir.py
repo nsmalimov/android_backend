@@ -34,9 +34,6 @@ def prepare_time(display_dates_string, duration):
     timestart_new = datetime.strptime(display_dates_string, format)
     timestart_new = timedelta(hours=timestart_new.hour) + timedelta(minutes=timestart_new.minute)
 
-    # duration_new = datetime.strptime(duration, format)
-    # duration_new = timedelta(hours = duration_new.hour) + timedelta(minutes = duration_new.minute)
-
     if (duration == time_help):
         # plus hours
         timeend_new = timestart_new + timedelta(hours=3)
@@ -132,8 +129,6 @@ def main_func(debug_param, average_kudago, time_array_need):
 
     time_array = time_array_need
 
-    # print time_array
-
     new_array = []
 
     for i in xrange(len(time_array)):
@@ -170,13 +165,6 @@ def main_func(debug_param, average_kudago, time_array_need):
     for index, i in enumerate(data):
         # по категориям
         for index1, j in enumerate(i):
-            # if (len(j) == 0):
-            #   del data[index][index1]
-            #   print len(j), index, index1, "del"
-            #   continue
-            # else:
-            #   print len(j), index, index1
-
             # по каждому в категории
             for index2, k in enumerate(j):
                 if (k['images'] != "no" and not (":" in k['images'])):
@@ -221,21 +209,8 @@ def main_func(debug_param, average_kudago, time_array_need):
     # время
     main_array = data
 
-    # for index, i in enumerate(main_array):
-    # по категориям
-    #    for index1, j in enumerate(i):
-    #        if (len(j) == 0):
-    #           del data[index][index1]
-
     categories_array_eng = list(set(all_eng_categories))
 
     categories_array_rus = list(set(all_rus_categories))
 
     return main_array, time_array, categories_array_eng, categories_array_rus
-
-# import datetime
-
-# date = datetime.date.today()
-
-# date = [str(date)]
-# main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, 1, date)

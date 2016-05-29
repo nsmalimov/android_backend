@@ -11,7 +11,6 @@ def check_name(some_path):
     for i in some_path:
         all_event_id.append(i[-1])
 
-    # print all_event_id
     return all_event_id
 
 
@@ -24,16 +23,11 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
         main_array.append([i.event['timestart'], i.event['timeend'], \
                            i.event['duration'], i.event['fixedtime'], i.event['id']])
 
-    # for i in main_array:
-    #    print i[0]
     first_event = main_array[0]
     last_event = main_array[-1]
 
     del main_array[0]
     del main_array[-1]
-
-    # for i in main_array:
-    #    print i[0]
 
     main_array.sort(key=lambda x: x[0])
 
@@ -44,14 +38,9 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
     new_path = []
     new_path.append(first_event)
 
-    # for i in main_array:
-    #    print i[0], i[1], i[2]
-
-
     counter = 0
     # плюс проверка на ночное время
     for i in main_array:
-        # if fixedtime (театры, концерты)
         if (i[3]):
             # если событие вообще не в интервале приезда
             if (i[0] < time_in or i[0] > time_out):
@@ -72,10 +61,8 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
                 break
 
             copy_i = copy.deepcopy(i)
-            # i.append(time_road_to)
 
             if (time_road_to > datetime.timedelta(minutes=45)):
-                # print time_road_to
                 continue
 
             if (i[-1] in check_name(new_path)):
@@ -86,8 +73,6 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
 
             # окончательное время окончания последнего события добавленного в массив
             last_time = i[0] + i[2]
-
-        # if not fixedtime (парки, музеи)
 
         if (not (i[3])):
             check_var = False
@@ -133,7 +118,6 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
                 to_insert[0] = starter_time
                 to_insert[1] = starter_time + i[2]
 
-                # to_insert.append(time_road_to)
                 latitude1 = events[last_id]['latitude']
                 longitude1 = events[last_id]['longitude']
 
@@ -159,15 +143,9 @@ def check_time_func(time_in, time_out, path, dist_matrix, events):
 
     for index, i in enumerate(new_path):
         if ((i[-1] + 1) < len(dist_matrix)):
-            # print dist_matrix[i[-1]] [i[-1] + 1]
             new_path[index].append(dist_matrix[i[-1]][i[-1] + 1])
 
-    # for i in new_path:
-    #    print i[-1]
     new_path[-1].append(0)
-
-    # for i in new_path:
-    #    print i[-1]
 
     return new_path
 
@@ -195,7 +173,6 @@ class AStar(object):
             if current == end:
                 path = []
                 while current.parent:
-                    # print dir(current)
                     path.append(current)
                     current = current.parent
 
@@ -222,8 +199,6 @@ class AStar(object):
                     if node.g > new_g:
                         node.g = new_g
                         node.parent = current
-                        # last_x = node.x
-                        # last_y = node.y
                 else:
                     g_func = current.move_cost(node, copy.deepcopy(dist_matrix))
                     node.g = current.g + g_func
@@ -232,8 +207,6 @@ class AStar(object):
                     last_x = node.x
                     last_y = node.y
                     openset.add(node)
-                    # counter += 1
-                    # print counter
         return None
 
 

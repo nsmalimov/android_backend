@@ -27,7 +27,6 @@ def prepare_time(display_dates_string, duration):
     timeend_new = 0
     duration_new = 0
 
-    # print display_dates_string, duration
     from datetime import datetime
 
     time_split = display_dates_string.split(" ")
@@ -173,13 +172,3 @@ def main_func(debug_param, average_kudago, time_array_need):
     categories_array_rus = list(set(all_rus_categories))
 
     return main_array, time_array, categories_array_eng, categories_array_rus
-
-# import datetime
-
-# date = datetime.date.today()
-
-# date = [str(date)]
-
-# main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, 1, date)
-
-# print categories_array_eng

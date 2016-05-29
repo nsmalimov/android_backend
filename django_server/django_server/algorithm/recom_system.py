@@ -24,25 +24,10 @@ def select_event_title(cur, recom_id_event):
 
 
 def main_func(vk_id):
-    recom_title_event = []
-
-    # db_name = psql_preferences.dbname_local
-    # db_user = psql_preferences.user_local
-    # db_password = psql_preferences.password_local
-    # db_localhost = psql_preferences.host_local
-    # db_port = psql_preferences.port_local
-
-    # cur, conn = psql_preferences.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
-
     cur = connection.cursor()
 
     recom_id_event = select_ratings(cur, vk_id)
 
     recom_title_event = select_event_title(cur, recom_id_event)
 
-    # connection.close()
-    # psql_preferences.disconnect_from_db(cur, conn)
-
     return recom_title_event
-
-# main_func(21747799)

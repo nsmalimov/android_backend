@@ -551,22 +551,12 @@ def main_func(debug_param, time_array_need):
         print "Pending places"
 
     time_array = time_array_need
-
-    # if (is_file_head(time_array)):
-    #    print "don't calculate places"
-    #    return get_head_array(time_array)
-
     path = os.path.dirname(os.path.abspath(__file__))[:-15] + "/kudago_get_data/data/"
     data_place = data_place_func(path + "places.pkl")
 
     need_place_eng = need_places.need_places
 
     all_events = get_all_events_name(data_place)
-
-    # print all_events[0]
-    # for i in all_events:
-    #    for j in i:
-    #        print i['categoriesrus']
 
     for i in need_place_eng:
         if (i in all_events):
@@ -575,8 +565,6 @@ def main_func(debug_param, time_array_need):
             need_place_eng.remove(i)
 
     need_place_rus = get_rus_name_events(data_place, need_place_eng)
-
-    # print need_place_rus
 
     # массив контролируем какие данные будем брать по категориям мест
     data_place = filter_place_need(data_place, need_place_eng)
@@ -598,49 +586,6 @@ def main_func(debug_param, time_array_need):
     main_array, categories_array_eng, categories_array_rus = \
         need_places.prepare_categories(main_array, categories_array_eng, categories_array_rus)
 
-    # write_check_files(main_array, time_array, categories_array_eng, categories_array_rus)
     print "new write"
 
     return main_array, time_array, categories_array_eng, categories_array_rus
-
-# пустых категорий нет
-
-# date = get_today_data()
-# date = ["2015-06-03"]
-#
-# main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, date)
-#
-# count = 0
-#
-# for i in main_array:
-#     for j in i:
-#         count += 1
-#
-# print count
-
-# for i in categories_array_rus:
-#    print i
-
-# for i in categories_array_rus:
-#    print i
-# for i in categories_array_rus:
-#    print i
-# for i in main_array:
-#    for j in i:
-#        for k in j:
-#            print k['categoriesrus']
-
-# print time_array
-
-# for index1, i in enumerate(main_array):
-#         count = 0
-#         for index2, j in enumerate(i):
-#             for index3, k in enumerate(j):
-#                 main_array[index1][index2][index3]['id'] = count
-#                 count += 1
-#
-# for index1, i in enumerate(main_array):
-#         for index2, j in enumerate(i):
-#             for index3, k in enumerate(j):
-#                 print k['id']
-#         print "next"

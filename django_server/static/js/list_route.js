@@ -58,7 +58,7 @@ function geocoderYandex(latitude, longitude) {
     var address = JSON.parse(value);
     address = address['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']["metaDataProperty"]['GeocoderMetaData']['text'];
 
-    address = address.replace("Россия, ", "")
+    address = address.replace("Россия, ", "");
     return address;
 }
 

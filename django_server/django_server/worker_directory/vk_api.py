@@ -6,8 +6,6 @@ import time
 
 import requests
 
-# from datetime import date, timedelta
-
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +24,6 @@ PROFILE_FIELDS = ','.join(['sex', 'bdate', 'personal' \
 # universities (информация об университете)
 
 def get_age(date_birth):
-    # print date_birth
     age = 0
     # DD.MM.YYYY
 

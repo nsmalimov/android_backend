@@ -12,10 +12,7 @@ def get_events(path, date):
 
     path = path + "events/"
     for file in glob.glob(path + "*.pkl"):
-        # print file, need_filename
         if (file == need_filename):
-            # print file
-            # print need_filename
             filename = open(file, 'r')
             events = pickle.load(filename)
             filename.close()
@@ -31,7 +28,6 @@ def get_distance_matrix(path, date):
     path = path + "distance_matrix/"
     for file in glob.glob(path + "*.pkl"):
         if (file == need_filename):
-            # print file
             filename = open(file, 'r')
             dist_matrix = pickle.load(filename)
             filename.close()

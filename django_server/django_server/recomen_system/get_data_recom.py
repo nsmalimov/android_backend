@@ -15,8 +15,6 @@ def connect_to_db():
 
     cur, conn = pref.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
 
-    # cur = connection.cursor()
-
     return cur, conn
 
 
@@ -47,16 +45,11 @@ def get_ratings_data(cur):
 
 
 def main_get_data_func():
-    # cur, conn = connect_to_db()
-
     cur = connection.cursor()
     users_data = get_users_data(cur)  # [3404185, 214, 0, 2, 226, 0, 18]
 
     events_data = get_events_data(cur)  # [1, 110, 1251, 65, 2, 0, 1]
 
     ratings_data = get_ratings_data(cur)  # [1, 21747799, 5] [events_id, vk_id, assessment]
-
-    # pref.disconnect_from_db(cur, conn)
-    # connection.close()
 
     return users_data, events_data, ratings_data

@@ -67,15 +67,6 @@ forest1.fit(X_train, Y_train)
 
 create_dist_matrix(forest1, path)
 
-# f = open(path + "distance_matrix/dist_2015-06-09.pkl", "r")
-
-# dist_matrix = pickle.load(f)
-
-# f.close()
-# for i in dist_matrix:
-#	print i
-
-
 f = open(path + "scikit_model/scikit_model.pkl", "w")
 
 pickle.dump(forest1, f)

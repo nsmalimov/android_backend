@@ -35,6 +35,4 @@ def get_wich_days():
 
         dates.append(month + "-" + days + "-" + years)
 
-    # dates.append("6-15-2015")
-    # print dates
     return dates

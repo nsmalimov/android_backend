@@ -82,8 +82,6 @@ def hybrid_train(predicted_array_1, predicted_array_2, actual_array_1):
 
 
 def predict(array_to_predict):
-    # array_to_predict [event_id, vk_id]
-    # event_id, vk_id, assessment
     answer = []
 
     # обучение модели на существующих данных
@@ -92,14 +90,7 @@ def predict(array_to_predict):
     predicted_array_1, actual_array_1 = claster_based.main(users_data, events_data, ratings_data)
     predicted_array_2, actual_array_2 = item_based.main(users_data, events_data, ratings_data)
 
-    # print len(predicted_array_1), len(actual_array_1)
-    # print len(predicted_array_2), len(actual_array_2)
-
     w1, w2 = hybrid_train(predicted_array_1, predicted_array_2, actual_array_1)
-
-    # print w1, w2
-
-    # get_metrics(predicted_array_1, predicted_array_2, actual_array_2, w1, w2)
 
     for i in array_to_predict:
         predict_asses = hybrid_predict(i[0], i[1], w1, w2, users_data, events_data, ratings_data)
@@ -107,7 +98,5 @@ def predict(array_to_predict):
 
     # обучить модель регрессии
     # выбрать лучшие параметры
-
-    # answer = [[3, 21747799, 1], [5, 21747799, 2], [8, 21747799, 3], [9, 21747799, 4], [10, 21747799, 5]]
 
     return answer

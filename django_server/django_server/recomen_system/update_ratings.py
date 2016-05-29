@@ -80,14 +80,6 @@ def insert_predicted(cur, predicted_array):
 
 
 def psql_update_ratings():
-    # db_name = pref.dbname_local
-    # db_user = pref.user_local
-    # db_password = pref.password_local
-    # db_localhost = pref.host_local
-    # db_port = pref.port_local
-
-    # cur, conn = pref.connect_to_db(db_name, db_user, db_password, db_localhost, db_port)
-
     cur = connection.cursor()
 
     array_to_predict = select_not_asses(cur)
@@ -97,9 +89,3 @@ def psql_update_ratings():
     insert_predicted(cur, predicted_array)
 
     connection.commit()
-    # conn.commit()
-    # pref.disconnect_from_db(cur, conn)
-
-    # connection.close()
-
-# psql_update_ratings()

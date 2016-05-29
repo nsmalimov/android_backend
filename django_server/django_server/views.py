@@ -25,7 +25,6 @@ def build_route(request):
     if request.method == 'POST':
         q = request.POST
         some_dict = q.dict()
-        # print some_dict
         result_route = diplom_django.worker_directory.worker_func.main_worker_func(some_dict)
         return HttpResponse(json.dumps(result_route), content_type="application/json")
 
@@ -44,11 +43,8 @@ def asses_func(request):
     if request.method == 'POST':
         q = request.POST
         some_dict = q.dict()
-        # print some_dict
-        # {u'event_name': u'\u0430\u0440\u0442, u'asses': u'1', u'id': u'21747799'}
         diplom_django.worker_directory.psql_work.add_assesment(some_dict)
 
-        # print some_dict
         result_route = "accept"
 
         return HttpResponse(json.dumps(result_route), content_type="application/json")

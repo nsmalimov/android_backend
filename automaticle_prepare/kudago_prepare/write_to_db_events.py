@@ -182,7 +182,7 @@ def only_time_check(date_is, need_date_array):
             date_between.append(now_date)
 
             while (now_date <= end_date):
-                now_date = now_date  # + datetime.timedelta(days=1)
+                now_date = now_date
                 date_between.append(now_date)
             for i in date_between:
                 try:
@@ -218,7 +218,6 @@ def create_array_good_time(events_data, time_array_need):
 
     month_array = [u'января', u'февраля', u'марта', u'апреля', u'мая', u'июня', u'июля', u'августа', u'сентября',
                    u'октября', u'ноября', u'декабря']
-    # today_date = get_today_data()
 
     need_date_array = time_array_need
 
@@ -335,7 +334,6 @@ def insert_other_information(events_day, events_data_place):
         for j in xrange(len(events_day_new[i])):
             if (events_day_new[i][j]['duration'] > timedelta(minutes=180)):
                 events_day_new[i][j]['duration'] = timedelta(minutes=90)
-            # else:
             events_day_new[i][j]['fixedtime'] = True
 
             if (events_day_new[i][j]['phone'] == ''):
@@ -528,14 +526,6 @@ def main_func(debug_param, time_array_need):
 
     time_array = time_array_need
 
-    # for i in xrange(len(time_array)):
-    #    time_array[i] = time_array[i][0:4] + "_" + time_array[i][5:7] + "_" + time_array[i][8:len(time_array[i])]
-
-    #############
-    # if (is_file_head(time_array)):
-    #    print "don't calculate events"
-    #    return get_head_array(time_array)
-
     # извлекаем все данные
     path = os.path.dirname(os.path.abspath(__file__))[:-15] + "/kudago_get_data/data/"
 
@@ -577,27 +567,5 @@ def main_func(debug_param, time_array_need):
     main_array, categories_array_eng, categories_array_rus = \
         need_events.prepare_categories(main_array, categories_array_eng, categories_array_rus)
 
-    ##########
-    # write_check_files(main_array, time_array, categories_array_eng, categories_array_rus)
-
     print "new write"
     return main_array, time_array, categories_array_eng, categories_array_rus
-
-# пустых категорий нет
-
-# date = get_today_data()
-# date = ["2015-06-03"]
-#
-# #print date
-# main_array, time_array, categories_array_eng, categories_array_rus = main_func(True, date)
-#
-# count = 0
-#
-# for i in main_array:
-#     for j in i:
-#         count += 1
-#
-# print count
-
-# for i in categories_array_eng:
-#    print i

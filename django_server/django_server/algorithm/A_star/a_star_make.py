@@ -23,12 +23,6 @@ def make_graph(width, height, events):
 
     nodes[-1][-1] = AStarGridNode(width, width, events[-1])
 
-    # print events[-1]['id']
-    # for i in nodes:
-    #   for j in i:
-    #       print j.event['id'],
-    #   print
-
     graph = {}
     for x, y in product(range(width), range(height)):
         node = nodes[x][y]
@@ -52,20 +46,5 @@ def get_route_astar_funk(events, dist_matrix, time_in, time_out, copy_dist_matri
     start, end = nodes[0][0], nodes[len(events) - 1][len(events) - 1]
 
     path = paths.search(time_in, time_out, start, end, dist_matrix, copy_dist_matrix, events)
-
-    some_array = []
-
-    all_cost = 0
-
-    last_x = 0
-    last_y = 0
-
-    # for i in path:
-    #    print i.x, i.y, i.event['title'], i.event['timestart'], i.event['timeend']
-
-    # for i in path:
-    #    print i.x, i.y, i.event['title'], i.event['id']
-    #    all_cost += dist_matrix[last_x][i.event['id']]
-    #    last_x = i.event['id']
 
     return path

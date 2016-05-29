@@ -31,7 +31,6 @@ event_categories = [
     ('sport', 'type9', 'Спорт'),  # 8
 ]
 
-# event_categories_list = ['concert', 'show']
 event_categories_list = ['theater', 'concert', 'show', 'clubs', 'kids', 'excursions', 'exhibition', 'sport']
 
 page_conv = lambda n: "/list%d" % n
@@ -91,7 +90,6 @@ def parse_events(date):
         try:
             soup = BeautifulSoup(make_request(url))
         except:
-            # print "error: open url ", url
             continue
 
         try:
@@ -99,13 +97,7 @@ def parse_events(date):
             n_pages = soup.find(class_="page_nav").findAll('li')[-2].string
             n_pages = int(n_pages)
         except:
-            # print "cannot find nums of pages"
             n_pages = 1
-
-        # print n_pages
-
-        # print n_pages
-        # print url
 
         return_checker = 0
         while i_page != n_pages:
@@ -116,7 +108,6 @@ def parse_events(date):
                 soup = BeautifulSoup(make_request(url))
                 afisha_events_item = soup.find_all(class_='middle_part')
             except:
-                # print "middle_part error"
                 continue
 
             for event in afisha_events_item:
@@ -127,23 +118,19 @@ def parse_events(date):
                 try:
                     title = event.find(class_='mp_news_item_text').find('h2').find('a')['title']
                     parsed_event['title'] = str(title)
-                    # print title
                 except Exception as inst:
-                    # print "title"
                     continue
 
                 try:
                     ticket = event.find(class_='bt_buy fr')['href']
                     parsed_event['ticket'] = str(domain + ticket)
                 except:
-                    # print "ticket"
                     parsed_event['ticket'] = "no"
 
                 try:
                     place_url = event.find(class_='place_title').a['href']
                     place_url = domain + place_url
                 except:
-                    # print "place url"
                     continue
 
                 try:
@@ -151,7 +138,6 @@ def parse_events(date):
                     event_url = domain + event_url
                     parsed_event['url'] = str(event_url)
                 except:
-                    # print "event_url"
                     continue
 
                 try:
@@ -160,7 +146,6 @@ def parse_events(date):
                     address = place_soup.find(class_='event_nav_item nav_place').find('span').string
                     parsed_event['address'] = str(address)
                 except:
-                    # print "address"
                     continue
 
                 try:
@@ -170,7 +155,6 @@ def parse_events(date):
                     time = ' '.join(str(time).split())
                     parsed_event['display_dates_string'] = time
                 except:
-                    # print "display_dates_string"
                     continue
 
                 try:
@@ -178,21 +162,18 @@ def parse_events(date):
                     description = ' '.join(str(description).split())
                     parsed_event['description'] = description
                 except:
-                    # print "description"
                     parsed_event['description'] = "no"
 
                 try:
                     duration_time = event_soup.find(itemprop="duration").string
                     parsed_event['duration'] = str(duration_time)
                 except:
-                    # print "duration"
                     parsed_event['duration'] = "no"
 
                 try:
                     image = event_soup.find(class_='event_image fl').findAll('img')[0].attrs['src']
                     parsed_event['images'] = str(image)
                 except:
-                    # print "image"
                     parsed_event['images'] = "no"
 
                 parsed_data.append(copy.deepcopy(parsed_event))
@@ -247,26 +228,3 @@ def parsing(time_array_need):
     pickle.dump(bileter_data, output)
 
     output.close()
-
-    # parsing(["2015-06-03"])
-    # import datetime
-
-    # date = datetime.date.today()
-
-    # date = [str(date)]
-    # time_array_need = ['2015-05-17', '2015-05-18', '2015-05-19',\
-    #                   '2015-05-20', '2015-05-21', '2015-05-22',\
-    #                   '2015-05-23',
-    #                   '2015-05-24', '2015-05-25', '2015-05-26',\
-    #                   '2015-05-27', '2015-05-28', '2015-05-29',\
-    #                   '2015-05-30']
-    # time_array_need = ['2015-05-16', '2015-05-17', '2015-05-18',\
-    #                   '2015-05-19', '2015-05-20', '2015-05-21',\
-    #                   '2015-05-22']
-
-    # time_array_need = get_time_array(7, "today")
-
-    # time_array_need = get_time_array(7, "next")
-
-
-    # parsing(time_array_need)

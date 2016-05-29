@@ -31,7 +31,7 @@ def get_distance(latitude1, longitude1, latitude2, longitude2, flag):
                + str(latitude1) + "," + str(longitude1) + \
                "&" + "destination=" + str(latitude2) + "," + str(longitude2) \
                + "&mode=" + flag
-    # print main_str
+
     try:
         response = urllib2.urlopen(main_str)
         data = json.load(response)

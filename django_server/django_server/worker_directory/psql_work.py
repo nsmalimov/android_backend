@@ -31,8 +31,6 @@ def add_user(vk_id):
 def add_assesment(request_dict):
     cur = connection.cursor()
 
-    # cur, conn = connect_to_db(dbname_local, user_local, password_local, 'localhost', "5432")
-
     event_base_id = 1
     cur.execute("SELECT event_id FROM events_table WHERE title=" + "'" + request_dict['event_name'] + "'")
 
@@ -51,7 +49,6 @@ def add_assesment(request_dict):
     assesment_new = float(request_dict['asses'])
 
     if (len(check_array) != 0):
-        # assesment_old = check_array[0]
         cur.execute(
             """UPDATE ratings_table SET assessment=""" + str(assesment_new) +
             """ WHERE event_id=""" + str(event_base_id) + """ AND """ +
@@ -64,6 +61,4 @@ def add_assesment(request_dict):
             {'event_id': event_base_id, 'vk_id': int(request_dict['id']), \
              'assessment': assesment_new, 'system_asses': False})
 
-    # conn.commit()
-    # conn.close()
     connection.commit()

@@ -17,7 +17,6 @@ def predict_item_based(user_id, event_id, dict_rate, average_rate, array_users_a
     new_dict = copy.deepcopy(data_events.copy())
     del new_dict[event_id]
 
-    # count = 0
     for i in new_dict.keys():
         try:
             s = copy.deepcopy(dict_rate[user_id][i])
@@ -98,8 +97,6 @@ def rating_dict_create(ratings_data):
 
 
 def main(users_data, events_data, ratings_data):
-    # event_id, vk_id, assessment
-
     users = []
     for i in ratings_data:
         users.append(i[1])
@@ -147,7 +144,6 @@ def predict_item_based_single(event_id, user_id, dict_rate, data_events):
     new_dict = copy.deepcopy(dict_event.copy())
     del new_dict[event_id]
 
-    # count = 0
     for i in new_dict.keys():
         try:
             s = copy.deepcopy(dict_rate[user_id][i])
@@ -157,7 +153,6 @@ def predict_item_based_single(event_id, user_id, dict_rate, data_events):
             sum_down += 0
             continue
 
-        # print data_events[i], data_events[event_id]
         sum_up += get_similarity(i, event_id, dict_event) * (dict_rate[user_id][i] - average_rate[i])
         sum_down += get_similarity(i, event_id, dict_event)
 

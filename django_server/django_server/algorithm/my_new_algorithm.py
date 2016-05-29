@@ -60,14 +60,12 @@ def main_reformat_dist_matrix(recom_events, dist_matrix, events):
 
             # если не успеваем
             if (time_diff < one_second or time_diff == one_second):
-                # print events[i]['timestart'], events[j]['timestart'], time_diff
                 dist_matrix[i][j] = 10000
                 continue
 
             # не успеваем с ожиданием и время не фиксировано
             if (((events[i]['timestart'] + events[i]['duration']) >= events[j]['timestart']) \
                         and (events[j]['fixedtime'])):
-                # print events[i]['timestart'], events[j]['timestart'], time_diff
                 dist_matrix[i][j] = 10000
                 continue
 
@@ -77,17 +75,12 @@ def main_reformat_dist_matrix(recom_events, dist_matrix, events):
             # если даже с продолжительностю высокое время ожидания между событиями
             first_event_end = events[i]['duration'] + fist_event_time_start
             time_diff = second_event_time_start - first_event_end
-            # print duration
 
             # если ждать более 3 часов
             marker_hour = datetime.timedelta(hours=3)
             if (time_diff > marker_hour):
-                # print first_event_end, events[j]['timestart'], time_diff
                 dist_matrix[i][j] = 800
                 continue
-
-                # print dist_matrix[i][j], time_diff
-                # print events[i]['timestart'], events[j]['timestart'], events[i]['duration'], events[i]['fixedtime']
 
     return dist_matrix
 
@@ -98,21 +91,16 @@ def get_route(recom_events, date, time_to, time_from, latitude_in, longitude_in,
     # описание события, время до следующей точки, время начала, время конца, широта, долгота
 
     # рекомендации не используем
-    # recom_events = []
 
     local = True
     date = date[6:len(date)] + "-" + date[3:5] + "-" + date[0:2]
     events, dist_matrix, scikit_model = get_data.get_data_from_files(date)
-
-    # print len(events)
 
     keys = copy.deepcopy(events[0].keys())
 
     # добавляем в матрицу расстояний 2 столбца
     dist_matrix = reformat_distance_matrix(events, dist_matrix, scikit_model, latitude_in, longitude_in, latitude_out,
                                            longitude_out)
-
-    # print dist_matrix
 
     # добавить как события первый и последний пункт маршрута в массива событий
     time_in_split = time_to.split(":")
@@ -155,8 +143,5 @@ def get_route(recom_events, date, time_to, time_from, latitude_in, longitude_in,
     # преобразовать матрицу расстояний согласно рангу событий и рекомендаций
 
     route_events_array = astar.get_route_astar_funk(events, dist_matrix, time_in, time_out, copy_dist_matrix)
-
-    # for i in route_events_array:
-    #    print i[0], events[i[4]]['title']
 
     return events, route_events_array

@@ -125,11 +125,9 @@ def inserter_func(cur, all_events):
 
 
 def insert_events_psql(all_events):
-    # cur, conn = connect_to_db(dbname_local, user_local, password_local, 'localhost', "5432")
     cur = connection.cursor()
     inserter_func(cur, all_events)
     connection.commit()
-    # disconnect_from_db(cur, conn)
 
 
 def main_func():

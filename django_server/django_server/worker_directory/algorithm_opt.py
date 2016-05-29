@@ -49,8 +49,6 @@ def get_route_main(request_dict, recom_events):
         # возврат адреса
         # время в дороге (int)
 
-        # i.event['timestart'], i.event['timeend'], \
-        # i.event['duration'], i.event['fixedtime'], i.event['id'], time_next
         first_dict = {"time_start": time_conversion(route[0][0]), "time_road_next": route[0][-1], \
                       "latitude": events[route[0][4]]['latitude'], "longitude": events[route[0][4]]['longitude']}
         array_out['first_place'] = first_dict
@@ -80,10 +78,6 @@ def get_route_main(request_dict, recom_events):
 
         last_dict = {"time_end": time_conversion(route[-1][1]), \
                      "latitude": events[route[-1][4]]['latitude'], "longitude": events[route[-1][4]]['longitude']}
-
-        # last_dict = {"time_end": time_from, "latitude": latitude_out, "longitude": longitude_out}
-
-        # print last_dict
 
         array_out['last_place'] = last_dict
 

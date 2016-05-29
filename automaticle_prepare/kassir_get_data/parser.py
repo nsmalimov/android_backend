@@ -26,8 +26,6 @@ event_categories = [
     ('sport', 'categories=c11', 'Спорт'),  # 8
 ]
 
-# event_categories_list = ['concert']
-
 event_categories_list = ['theater', 'concert', 'show', 'clubs', 'kids', 'excursions', 'exhibition', 'sport']
 
 page_conv = lambda n: "/list%d" % n
@@ -149,11 +147,9 @@ def parse_events(one_date):
         i_page = 0
         url = domain + 'kassir/search/?date=' + date_prepare + '&' + cat_type + "&page=" + str(i_page + 1)
 
-        # print url
         try:
             soup = BeautifulSoup(make_request(url))
         except:
-            # print "error: open new url"
             continue
 
         try:
@@ -162,7 +158,6 @@ def parse_events(one_date):
             n_pages_split = n_pages.split("&page=")
             n_pages = int(n_pages_split[-1])
         except Exception as inst:
-            # print "cannot find nums of pages", inst
             n_pages = 1
 
         return_checker = 0
@@ -318,7 +313,6 @@ def parsing(time_array_need):
                         if (split_address[0] != u"Санкт-Петербург,"):
                             day_array[k]['address'] = "Санкт-Петербург, " + day_array[k]['address']
                 except Exception as inst:
-                    # print inst
                     continue
 
             day_array[k]['latitude'] = latitude
@@ -333,19 +327,3 @@ def parsing(time_array_need):
     pickle.dump(kassir_data, output)
 
     output.close()
-
-# parsing(["2015-06-03"])
-# import datetime
-
-# date = datetime.date.today()
-
-# date = [str(date)]
-
-# time_array_need = ['2015-05-17', '2015-05-18', '2015-05-19',\
-#                   '2015-05-20', '2015-05-21', '2015-05-22',\
-#                   '2015-05-23',
-#                   '2015-05-24', '2015-05-25', '2015-05-26',\
-#                   '2015-05-27', '2015-05-28', '2015-05-29',\
-#                   '2015-05-30']
-#
-# parsing(time_array_need)
